@@ -19,105 +19,22 @@
         </p>
       </div>
     </div>
-    <div class="w3-container w3-text-grey" id="jeans">
-      <p>{{items.length}} items</p>
+    <div v-if="items">
+      <div class="w3-container w3-text-grey" id="jeans">
+        <p>{{items.length}} items</p>
+      </div>
+      <div class="w3-container w3-grayscale nopadding">
+        <div class="w3-col l3 s6 item" v-for="item in items" v-bind:key="item.id">
+          <img :src="item.image" style="width:100%" />
+          <p>
+            {{item.product_name}}
+            <br />
+            <b>{{item.price}}</b>
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="w3-container w3-grayscale nopadding">
-      <div class="w3-col l3 s6 item" v-for="item in items" v-bind:key="item.id">
-        <img :src="item.image" style="width:100%" />
-        <p>
-          {{item.product_name}}
-          <br />
-          <b>{{item.price}}</b>
-        </p>
-      </div>
-      <!--<div class="w3-container">
-        <div class="w3-row">
-        </div>
-        <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-        <p>
-          Mega Ripped Jeans
-          <br />
-          <b>$19.99</b>
-        </p>
-      </div>
-
-
-      <div class="w3-col l3 s6">
-        <div class="w3-container">
-          <div class="w3-display-container">
-            <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-            <span class="w3-tag w3-display-topleft">New</span>
-            <div class="w3-display-middle w3-display-hover">
-              <button class="w3-button w3-black">
-                Buy now
-                <i class="fa fa-shopping-cart"></i>
-              </button>
-            </div>
-          </div>
-          <p>
-            Mega Ripped Jeans
-            <br />
-            <b>$19.99</b>
-          </p>
-        </div>
-        <div class="w3-container">
-          <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-          <p>
-            Washed Skinny Jeans
-            <br />
-            <b>$20.50</b>
-          </p>
-        </div>
-      </div>
-
-      <div class="w3-col l3 s6">
-        <div class="w3-container">
-          <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-          <p>
-            Washed Skinny Jeans
-            <br />
-            <b>$20.50</b>
-          </p>
-        </div>
-        <div class="w3-container">
-          <div class="w3-display-container">
-            <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-            <span class="w3-tag w3-display-topleft">Sale</span>
-            <div class="w3-display-middle w3-display-hover">
-              <button class="w3-button w3-black">
-                Buy now
-                <i class="fa fa-shopping-cart"></i>
-              </button>
-            </div>
-          </div>
-          <p>
-            Vintage Skinny Jeans
-            <br />
-            <b class="w3-text-red">$14.99</b>
-          </p>
-        </div>
-      </div>
-
-      <div class="w3-col l3 s6">
-        <div class="w3-container">
-          <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-          <p>
-            Vintage Skinny Jeans
-            <br />
-            <b>$14.99</b>
-          </p>
-        </div>
-        <div class="w3-container">
-          <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-          <p>
-            Ripped Skinny Jeans
-            <br />
-            <b>$24.99</b>
-          </p>
-        </div>
-      </div>-->
-    </div>
+    <div style="height: 400px; font-size: 3em; color: grey" v-else>Retrieving items for you</div>
     <Footer />
   </div>
 </template>
