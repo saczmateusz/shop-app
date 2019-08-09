@@ -4,7 +4,7 @@
     <header class="w3-container w3-xlarge">
       <p class="w3-left">Welcome</p>
       <p class="w3-right">
-        <i class="fa fa-shopping-cart w3-margin-right"></i>
+        <i class="fa fa-shopping-cart w3-margin-right right"></i>
         <i class="fa fa-search"></i>
       </p>
     </header>
@@ -20,27 +20,28 @@
       </div>
     </div>
     <div class="w3-container w3-text-grey" id="jeans">
-      <p>8 items</p>
+      <p>{{items.length}} items</p>
     </div>
-    <div class="w3-row w3-grayscale">
-      <div class="w3-col l3 s6">
-        <div class="w3-container">
-          <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-          <p>
-            Ripped Skinny Jeans
-            <br />
-            <b>$24.99</b>
-          </p>
-        </div>
-        <div class="w3-container">
-          <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
-          <p>
-            Mega Ripped Jeans
-            <br />
-            <b>$19.99</b>
-          </p>
-        </div>
+    <div class="w3-container w3-grayscale nopadding">
+      <div class="w3-col l3 s6 item" v-for="item in items" v-bind:key="item.id">
+        <img :src="item.image" style="width:100%" />
+        <p>
+          {{item.product_name}}
+          <br />
+          <b>{{item.price}}</b>
+        </p>
       </div>
+      <!--<div class="w3-container">
+        <div class="w3-row">
+        </div>
+        <img src="https://dummyimage.com/400x500.jpg/5fa2dd/ffffff" style="width:100%" />
+        <p>
+          Mega Ripped Jeans
+          <br />
+          <b>$19.99</b>
+        </p>
+      </div>
+
 
       <div class="w3-col l3 s6">
         <div class="w3-container">
@@ -115,13 +116,14 @@
             <b>$24.99</b>
           </p>
         </div>
-      </div>
+      </div>-->
     </div>
     <Footer />
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import Footer from '@/components/Footer.vue';
 import API from '@/lib/API';
 
@@ -129,6 +131,9 @@ export default {
   name: 'home',
   components: {
     Footer,
+  },
+  computed: {
+    ...mapState(['items']),
   },
   data() {
     return {
@@ -142,3 +147,19 @@ export default {
   },
 };
 </script>
+
+<style>
+.item {
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 360px;
+}
+
+.nopadding {
+  padding: 0px;
+}
+
+.right {
+  padding-right: 6.5px;
+}
+</style>

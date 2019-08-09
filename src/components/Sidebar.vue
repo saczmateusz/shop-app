@@ -1,10 +1,12 @@
 <template>
   <div class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="width: 250px">
-    <div class="w3-container w3-display-container w3-padding-16">
-      <h3 class="w3-wide">
-        <b>LOGO</b>
-      </h3>
-    </div>
+    <router-link class="rout" to="/">
+      <div class="w3-container w3-display-container w3-padding-16">
+        <h3 class="w3-wide">
+          <b>LOGO</b>
+        </h3>
+      </div>
+    </router-link>
     <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight: bold">
       <a class="w3-bar-item w3-button">Shirts</a>
       <a class="w3-bar-item w3-button">Dresses</a>
@@ -23,9 +25,9 @@
       <a class="w3-bar-item w3-button">Blazers</a>
       <a class="w3-bar-item w3-button">Shoes</a>
     </div>
-    <a class="w3-bar-item w3-button w3-padding">Contact</a>
+    <a href="#footer" class="w3-bar-item w3-button w3-padding">Contact</a>
     <a class="w3-bar-item w3-button w3-padding" v-on:click="onNewsletterClick">Newsletter</a>
-    <a class="w3-bar-item w3-button w3-padding">Subscribe</a>
+    <a href="#footer" class="w3-bar-item w3-button w3-padding">Subscribe</a>
 
     <div id="newsletter" class="w3-modal" style="display: block; z-index: 4" v-if="newsletter">
       <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
@@ -69,3 +71,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.rout {
+  text-decoration: none;
+}
+</style>

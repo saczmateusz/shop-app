@@ -23,14 +23,25 @@
 </template>
 
 <script>
+import { mapState, mapActions } from 'vuex';
 import Sidebar from '@/components/Sidebar.vue';
+import API from '@/lib/API';
 
 export default {
   name: 'app',
   components: {
     Sidebar,
   },
+  computed: {
+    ...mapState(['items']),
+  },
+  mounted() {
+    API.getData().then((result) => {
+      this.setItems(result);
+    });
+  },
   methods: {
+    ...mapActions(['setItems']),
     w3_open() {
       document.getElementById('sidebar').style.display = 'block';
       document.getElementById('overlay').style.display = 'block';
@@ -58,10 +69,10 @@ h4,
 h5,
 h6,
 .w3-wide {
-  font-family: "Montserrat", sans-serif;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .w3-sidebar a {
-  font-family: "Roboto", sans-serif;
+  font-family: 'Roboto', sans-serif;
 }
 </style>
