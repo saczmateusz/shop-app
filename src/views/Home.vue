@@ -2,13 +2,13 @@
   <div>
     <div class="w3-hide-large" style="margin-top:83px"></div>
     <header class="w3-container w3-xlarge">
-      <p class="w3-left">Welcome</p>
+      <p class="w3-left">{{title}}</p>
       <p class="w3-right">
         <i class="fa fa-shopping-cart w3-margin-right right"></i>
         <i class="fa fa-search"></i>
       </p>
     </header>
-    <div class="w3-display-container w3-container">
+    <div class="w3-display-container w3-container" v-if="home">
       <img src="../assets/images/jeans.jpg" alt="Jeans" style="width:100%" />
       <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
         <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
@@ -25,7 +25,7 @@
       </div>
       <div class="w3-container w3-grayscale nopadding">
         <div class="w3-col l3 s6" v-for="(item, index) in getRandomItems(rand)" v-bind:key="index">
-          <div class="w3-container item trigger">
+          <div class="w3-container item trigger flashing">
             <img :src="item.image" style="width: 100%" class="img-trigger" />
             <div class="onHover">
               <button class="w3-button w3-black" v-on:click="itemlog(item)">
