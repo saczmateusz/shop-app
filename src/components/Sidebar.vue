@@ -8,22 +8,22 @@
       </div>
     </router-link>
     <div class="w3-padding-64 w3-large w3-text-grey" style="font-weight: bold">
-      <a class="w3-bar-item w3-button">Shirts</a>
-      <a class="w3-bar-item w3-button">Dresses</a>
-      <a class="w3-bar-item w3-button" v-on:click="onJeansClick">
+      <router-link to="/category/Shirts" class="w3-bar-item w3-button">Shirts</router-link>
+      <router-link to="/category/Dresses" class="w3-bar-item w3-button">Dresses</router-link>
+      <router-link to="/category/Jeans" class="w3-bar-item w3-button">
         Jeans
-        <i class="fa fa-caret-down"></i>
-      </a>
+        <i class="fa fa-caret-down" v-on:click="onJeansClick"></i>
+      </router-link>
       <div class="w3-bar-block w3-hide w3-padding-large w3-medium w3-show" v-if="jeansList">
-        <a class="w3-bar-item w3-button">Skinny</a>
-        <a class="w3-bar-item w3-button">Relaxed</a>
-        <a class="w3-bar-item w3-button">Bootcut</a>
-        <a class="w3-bar-item w3-button">Straight</a>
+        <router-link to="/category/Skinny" class="w3-bar-item w3-button">Skinny</router-link>
+        <router-link to="/category/Relaxed" class="w3-bar-item w3-button">Relaxed</router-link>
+        <router-link to="/category/Bootcut" class="w3-bar-item w3-button">Bootcut</router-link>
+        <router-link to="/category/Straight" class="w3-bar-item w3-button">Straight</router-link>
       </div>
-      <a class="w3-bar-item w3-button">Jackets</a>
-      <a class="w3-bar-item w3-button">Gymwear</a>
-      <a class="w3-bar-item w3-button">Blazers</a>
-      <a class="w3-bar-item w3-button">Shoes</a>
+      <router-link to="/category/Jackets" class="w3-bar-item w3-button">Jackets</router-link>
+      <router-link to="/category/Gymwear" class="w3-bar-item w3-button">Gymwear</router-link>
+      <router-link to="/category/Blazers" class="w3-bar-item w3-button">Blazers</router-link>
+      <router-link to="/category/Shoes" class="w3-bar-item w3-button">Shoes</router-link>
     </div>
     <a href="#footer" class="w3-bar-item w3-button w3-padding">Contact</a>
     <a class="w3-bar-item w3-button w3-padding" v-on:click="onNewsletterClick">Newsletter</a>
@@ -75,5 +75,10 @@ export default {
 <style>
 .rout {
   text-decoration: none;
+}
+
+.router-link-active {
+  color: rgb(0, 0, 0);
+  background-color: rgb(241, 241, 241);
 }
 </style>
