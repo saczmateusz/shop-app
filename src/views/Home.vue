@@ -4,6 +4,7 @@
     <header class="w3-container w3-xlarge">
       <p class="w3-left">{{title}}</p>
       <p class="w3-right">
+        <span class="cart">{{cartCount}} items</span>
         <i class="fa fa-shopping-cart w3-margin-right right"></i>
         <i class="fa fa-search"></i>
       </p>
@@ -20,6 +21,11 @@
       </div>
     </div>
     <div v-if="items">
+      <div
+        class="w3-container w3-text-grey"
+        style="font-size: 3em"
+        v-if="!home"
+      >Explore our {{headerTitle()}} collection</div>
       <div class="w3-container w3-text-grey" id="jeans">
         <p>{{rand}} items</p>
       </div>
@@ -28,7 +34,7 @@
           <div class="w3-container item trigger flashing">
             <img :src="item.image" style="width: 100%" class="img-trigger" />
             <div class="onHover">
-              <button class="w3-button w3-black" v-on:click="itemlog(item)">
+              <button class="w3-button w3-black" v-on:click="saveToCart(item)">
                 Buy now
                 <i class="fa fa-shopping-cart"></i>
               </button>
@@ -42,27 +48,72 @@
         </div>
       </div>
     </div>
-    <div style="height: 400px; font-size: 3em; color: grey" v-else>Retrieving items for you</div>
+    <div class="await" v-else>Retrieving items for you</div>
+    <div id="pop-up" class="w3-modal" style="display: block; z-index: 4" v-if="popup">
+      <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
+        <div class="w3-container w3-white w3-center">
+          <i
+            v-on:click="popup=false"
+            class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge"
+          ></i>
+          <h2 class="w3-wide">Great choice!</h2>
+          <p>You have added 1 product to your cart.</p>
+          <button
+            type="button"
+            class="w3-button w3-padding-large w3-red w3-margin-bottom"
+            v-on:click="popup=false"
+          >BACK TO STORE</button>
+          <button
+            type="button"
+            class="w3-button w3-padding-large w3-black w3-margin-bottom"
+            style="margin-left: 20px"
+            v-on:click="popup=false"
+          >
+            SEE YOUR SHOPPING CART
+            <i
+              class="fa fa-shopping-cart w3-margin-right right"
+              style="margin-left: 5px"
+            ></i>
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex';
+import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'home',
   computed: {
     ...mapState(['items']),
+    ...mapGetters(['cartCount']),
+  },
+  watch: {
+    '$route.params.cat': function watch() {
+      this.reload();
+    },
   },
   data() {
     return {
+      title: '',
       rand: null,
+      home: false,
+      popup: false,
     };
   },
   mounted() {
+    this.title = this.$route.params.cat;
+    if (this.title === 'Welcome') {
+      this.home = true;
+    } else {
+      this.home = false;
+    }
     this.rand = Math.floor(Math.random() * 10 + 7);
   },
   methods: {
+    ...mapActions(['addToCart']),
     getRandomItems(items) {
       const ret = [];
       const indexes = [];
@@ -76,8 +127,32 @@ export default {
       }
       return ret;
     },
-    itemlog() {
-      // console.log(`'clicked: '${item.id}`);
+    reload() {
+      this.title = this.$route.params.cat;
+      if (this.title === 'Welcome') {
+        this.home = true;
+      } else {
+        this.home = false;
+      }
+      this.rand = Math.floor(Math.random() * 10 + 7);
+    },
+    saveToCart(item) {
+      this.addToCart(item);
+      this.popup = !this.popup;
+    },
+    onPopUpClick() {},
+    headerTitle() {
+      return (
+        this.title
+          .toLowerCase()
+          .split(' ')
+          .reverse()
+          // eslint-disable-next-line
+          .filter((element, index) => {
+            return index % 2 === 0;
+          })
+          .join(' ')
+      );
     },
   },
 };
@@ -85,7 +160,8 @@ export default {
 
 <style>
 .item {
-  padding: 0;
+  padding-left: 16px;
+  padding-right: 16px;
   min-height: 360px;
 }
 
@@ -95,6 +171,14 @@ export default {
 
 .right {
   padding-right: 6.5px;
+}
+
+.await {
+  height: 200px;
+  font-size: 2em;
+  color: grey;
+  margin: 110px 0px;
+  text-align: center;
 }
 
 .onHover {
@@ -121,5 +205,29 @@ export default {
 .trigger:hover {
   position: relative;
   top: -4px;
+}
+
+.flashing:active {
+  animation: flash 0.3s;
+}
+
+@keyframes flash {
+  0% {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  50% {
+    padding-left: 19px;
+    padding-right: 19px;
+  }
+  100% {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+}
+
+.cart {
+  font-size: 0.8em;
+  font-weight: bolder;
 }
 </style>
