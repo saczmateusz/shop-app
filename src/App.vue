@@ -18,25 +18,30 @@
       title="close side menu"
       id="overlay"
     ></div>
-    <router-view style="z-index: 1" />
+    <div class="w3-main" style="margin-left: 250px">
+      <router-view style="z-index: 1" />
+      <Footer />
+    </div>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex';
 import Sidebar from '@/components/Sidebar.vue';
+import Footer from '@/components/Footer.vue';
 import API from '@/lib/API';
 
 export default {
   name: 'app',
   components: {
     Sidebar,
+    Footer,
   },
   computed: {
     ...mapState(['items']),
   },
-  mounted() {
-    API.getData().then((result) => {
+  async beforeCreate() {
+    await API.getData().then((result) => {
       this.setItems(result);
     });
   },
