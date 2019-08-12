@@ -13,23 +13,21 @@
         <p>{{rand}} items</p>
       </div>
       <div class="w3-container w3-grayscale nopadding">
-        <div
-          class="w3-col l3 s6 item w3-container"
-          v-for="(item, index) in getRandomItems(rand)"
-          v-bind:key="index"
-        >
-          <img :src="item.image" style="width:100%" />
-          <div class="w3-display-middle w3-display-hover" style="z-index: 3">
-            <button class="w3-button w3-black">
-              Buy now
-              <i class="fa fa-shopping-cart"></i>
-            </button>
+        <div class="w3-col l3 s6" v-for="(item, index) in getRandomItems(rand)" v-bind:key="index">
+          <div class="w3-container item trigger">
+            <img :src="item.image" style="width: 100%" class="img-trigger" />
+            <div class="onHover">
+              <button class="w3-button w3-black" v-on:click="itemlog(item)">
+                Buy now
+                <i class="fa fa-shopping-cart"></i>
+              </button>
+            </div>
+            <p>
+              {{item.product_name}}
+              <br />
+              <b>{{item.price}}</b>
+            </p>
           </div>
-          <p>
-            {{item.product_name}}
-            <br />
-            <b>{{item.price}}</b>
-          </p>
         </div>
       </div>
     </div>
@@ -95,5 +93,31 @@ export default {
 
 .right {
   padding-right: 6.5px;
+}
+
+.onHover {
+  display: none;
+  position: relative;
+  top: -100px;
+  left: 63px;
+  margin: -19px;
+  padding: 0px;
+}
+
+.onHover:hover {
+  display: block;
+}
+
+.trigger:hover + .onHover {
+  display: block;
+}
+
+.img-trigger:hover + .onHover {
+  display: block;
+}
+
+.trigger:hover {
+  position: relative;
+  top: -4px;
 }
 </style>

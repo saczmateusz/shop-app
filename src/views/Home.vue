@@ -57,7 +57,6 @@ export default {
   data() {
     return {
       rand: null,
-      active: false,
     };
   },
   mounted() {
