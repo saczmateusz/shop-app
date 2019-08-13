@@ -42,5 +42,9 @@ export default new Vuex.Store({
     cartCount: (state) => {
       return state.cart.reduce((a, b) => a + (b.count || 0), 0);
     },
+    // eslint-disable-next-line
+    cartValue: (state) => {
+      return state.cart.reduce((a, b) => a + (b.count * b.price.slice(1) || 0), 0).toFixed(2);
+    },
   },
 });

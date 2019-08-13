@@ -3,6 +3,7 @@ import Router from 'vue-router';
 import Home from './views/Home.vue';
 import Category from './views/Category.vue';
 import Cart from './views/Cart.vue';
+import Checkout from './views/Checkout.vue';
 
 Vue.use(Router);
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/account/cart',
       name: 'cart',
       component: Cart,
+    },
+    {
+      path: '/checkout',
+      name: 'checkout',
+      component: Checkout,
     },
   ],
   scrollBehavior() {
