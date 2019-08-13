@@ -13,11 +13,17 @@ export default new Vuex.Store({
       state.items = payload;
     },
     addToCart(state, payload) {
-      state.cart.push(payload);
+      // eslint-disable-next-line
+      const index = state.cart.findIndex((element) => {
+        return element.id === payload.id;
+      });
+      if (index === -1) state.cart.push({ ...payload, count: 1 });
+      else state.cart[index].count += 1;
     },
     dropFromCart(state, payload) {
       const index = state.cart.indexOf(payload);
-      state.cart.splice(index, 1);
+      if (state.cart[index].count === 1) state.cart.splice(index, 1);
+      else state.cart[index].count -= 1;
     },
   },
   actions: {
@@ -34,7 +40,7 @@ export default new Vuex.Store({
   getters: {
     // eslint-disable-next-line
     cartCount: (state) => {
-      return state.cart.length;
+      return state.cart.reduce((a, b) => a + (b.count || 0), 0);
     },
   },
 });
