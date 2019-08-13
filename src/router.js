@@ -26,4 +26,7 @@ export default new Router({
       component: Cart,
     },
   ],
+  scrollBehavior() {
+    document.getElementById('app').scrollIntoView({ behavior: 'smooth' });
+  },
 });

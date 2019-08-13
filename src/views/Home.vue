@@ -63,69 +63,38 @@ export default {
     ...mapState(['items']),
     ...mapGetters(['cartCount']),
   },
-  watch: {
-    '$route.params.cat': function watch() {
-      this.reload();
-    },
-  },
   data() {
     return {
-      title: '',
       rand: null,
-      home: false,
       popup: false,
+      staticList: null,
     };
   },
   mounted() {
-    this.title = this.$route.params.cat;
-    if (this.title === 'Welcome') {
-      this.home = true;
-    } else {
-      this.home = false;
-    }
+    this.staticList = null;
     this.rand = Math.floor(Math.random() * 10 + 7);
   },
   methods: {
     ...mapActions(['addToCart']),
     getRandomItems(items) {
-      const ret = [];
-      const indexes = [];
-      const arrLength = 30;
-      while (ret.length < items) {
-        const i = Math.floor(Math.random() * arrLength);
-        if (indexes.indexOf(i) === -1) {
-          indexes[indexes.length] = i;
-          ret[ret.length] = this.items[i];
+      if (this.staticList === null) {
+        const result = [];
+        const indexes = [];
+        const arrLength = 30;
+        while (result.length < items) {
+          const i = Math.floor(Math.random() * arrLength);
+          if (indexes.indexOf(i) === -1) {
+            indexes[indexes.length] = i;
+            result[result.length] = this.items[i];
+          }
         }
+        this.staticList = result;
       }
-      return ret;
-    },
-    reload() {
-      this.title = this.$route.params.cat;
-      if (this.title === 'Welcome') {
-        this.home = true;
-      } else {
-        this.home = false;
-      }
-      this.rand = Math.floor(Math.random() * 10 + 7);
+      return this.staticList;
     },
     saveToCart(item) {
       this.addToCart(item);
       this.popup = !this.popup;
-    },
-    onPopUpClick() {},
-    headerTitle() {
-      return (
-        this.title
-          .toLowerCase()
-          .split(' ')
-          .reverse()
-          // eslint-disable-next-line
-          .filter((element, index) => {
-            return index % 2 === 0;
-          })
-          .join(' ')
-      );
     },
   },
 };

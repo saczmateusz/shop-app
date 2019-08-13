@@ -11,22 +11,10 @@
         <i class="fa fa-search"></i>
       </p>
     </header>
-    <div class="w3-display-container w3-container" v-if="home">
-      <img src="../assets/images/jeans.jpg" alt="Jeans" style="width:100%" />
-      <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
-        <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
-        <h1 class="w3-hide-large w3-hide-medium">New arrivals</h1>
-        <h1 class="w3-hide-small">COLLECTION 2016</h1>
-        <p>
-          <a href="#jeans" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a>
-        </p>
-      </div>
-    </div>
     <div v-if="items">
       <div
         class="w3-container w3-text-grey"
         style="font-size: 3em"
-        v-if="!home"
       >Explore our {{headerTitle()}} collection</div>
       <div class="w3-container w3-text-grey" id="jeans">
         <p>{{rand}} items</p>
@@ -77,41 +65,34 @@ export default {
     return {
       title: '',
       rand: null,
-      home: false,
       popup: false,
+      staticList: null,
     };
   },
   mounted() {
-    this.title = this.$route.params.cat;
-    if (this.title === 'Welcome') {
-      this.home = true;
-    } else {
-      this.home = false;
-    }
-    this.rand = Math.floor(Math.random() * 10 + 7);
+    this.reload();
   },
   methods: {
     ...mapActions(['addToCart']),
     getRandomItems(items) {
-      const ret = [];
-      const indexes = [];
-      const arrLength = 30;
-      while (ret.length < items) {
-        const i = Math.floor(Math.random() * arrLength);
-        if (indexes.indexOf(i) === -1) {
-          indexes[indexes.length] = i;
-          ret[ret.length] = this.items[i];
+      if (this.staticList === null) {
+        const result = [];
+        const indexes = [];
+        const arrLength = 30;
+        while (result.length < items) {
+          const i = Math.floor(Math.random() * arrLength);
+          if (indexes.indexOf(i) === -1) {
+            indexes[indexes.length] = i;
+            result[result.length] = this.items[i];
+          }
         }
+        this.staticList = result;
       }
-      return ret;
+      return this.staticList;
     },
     reload() {
+      this.staticList = null;
       this.title = this.$route.params.cat;
-      if (this.title === 'Welcome') {
-        this.home = true;
-      } else {
-        this.home = false;
-      }
       this.rand = Math.floor(Math.random() * 10 + 7);
     },
     saveToCart(item) {
