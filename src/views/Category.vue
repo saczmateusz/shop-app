@@ -82,8 +82,8 @@ export default {
         while (result.length < items) {
           const i = Math.floor(Math.random() * arrLength);
           if (indexes.indexOf(i) === -1) {
-            indexes[indexes.length] = i;
-            result[result.length] = this.items[i];
+            indexes.push(i);
+            result.push(this.items[i]);
           }
         }
         this.staticList = result;

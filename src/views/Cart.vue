@@ -2,7 +2,7 @@
   <div>
     <div class="w3-hide-large" style="margin-top:83px"></div>
     <header class="w3-container w3-xlarge">
-      <p class="w3-left">{{title}}</p>
+      <p class="w3-left">Shopping cart</p>
       <p class="w3-right">
         <router-link to="/" class="cart-link">
           <span class="cart">{{cartCount}} items</span>
@@ -11,28 +11,10 @@
         <i class="fa fa-search"></i>
       </p>
     </header>
-    <div class="w3-display-container w3-container" v-if="home">
-      <img src="../assets/images/jeans.jpg" alt="Jeans" style="width:100%" />
-      <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
-        <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
-        <h1 class="w3-hide-large w3-hide-medium">New arrivals</h1>
-        <h1 class="w3-hide-small">COLLECTION 2016</h1>
-        <p>
-          <a href="#jeans" class="w3-button w3-black w3-padding-large w3-large">SHOP NOW</a>
-        </p>
-      </div>
-    </div>
-    <div v-if="items">
-      <div
-        class="w3-container w3-text-grey"
-        style="font-size: 3em"
-        v-if="!home"
-      >Explore our {{headerTitle()}} collection</div>
-      <div class="w3-container w3-text-grey" id="jeans">
-        <p>{{rand}} items</p>
-      </div>
+    <div v-if="cart">
+      <div class="w3-container w3-text-grey" style="font-size: 3em">Chosen products</div>
       <div class="w3-container w3-grayscale nopadding">
-        <div class="w3-col l3 s6" v-for="(item, index) in getRandomItems(rand)" v-bind:key="index">
+        <div class="w3-col l3 s6" v-for="(item, index) in cart" v-bind:key="index">
           <div class="w3-container item trigger flashing">
             <img :src="item.image" style="width: 100%" class="img-trigger" />
             <div class="onHover">
@@ -80,6 +62,23 @@
         </div>
       </div>
     </div>
+    <div class="w3-container w3-white w3-center">
+      <button
+        type="button"
+        class="w3-button w3-left w3-black w3-margin-bottom"
+        @click="$router.go(-1)"
+      >BACK TO STORE</button>
+      <!-- <router-link :to="{name: 'cart'}"> -->
+      <button
+        type="button"
+        class="w3-button w3-right w3-green w3-margin-bottom"
+        @click="$router.go(-1)"
+      >
+        CHECKOUT
+        <i class="fa fa-arrow-right"></i>
+      </button>
+      <!-- </router-link> -->
+    </div>
   </div>
 </template>
 
@@ -89,25 +88,16 @@ import { mapState, mapActions, mapGetters } from 'vuex';
 export default {
   name: 'cart',
   computed: {
-    ...mapState(['items']),
+    ...mapState(['cart']),
     ...mapGetters(['cartCount']),
   },
   data() {
     return {
-      title: '',
-      rand: null,
-      home: false,
+      rand: 4,
       popup: false,
     };
   },
-  mounted() {
-    if (this.title === 'Welcome') {
-      this.home = true;
-    } else {
-      this.home = false;
-    }
-    this.rand = Math.floor(Math.random() * 10 + 7);
-  },
+  mounted() {},
   methods: {
     ...mapActions(['addToCart']),
     getRandomItems(items) {
@@ -123,31 +113,41 @@ export default {
       }
       return ret;
     },
-    reload() {
-      if (this.title === 'Welcome') {
-        this.home = true;
-      } else {
-        this.home = false;
+    getRandomItemsdd(items) {
+      if (this.staticList === null) {
+        const result = [];
+        const indexes = [];
+        const arrLength = 30;
+        while (result.length < items) {
+          const i = Math.floor(Math.random() * arrLength);
+          if (indexes.indexOf(i) === -1) {
+            indexes[indexes.length] = i;
+            result[result.length] = this.items[i];
+          }
+        }
+        this.staticList = result;
       }
-      this.rand = Math.floor(Math.random() * 10 + 7);
+      return this.staticList;
+    },
+    getRandomItemsddddd(items) {
+      if (this.staticList === null) {
+        const result = [];
+        const indexes = [];
+        const arrLength = 30;
+        while (result.length < items) {
+          const i = Math.floor(Math.random() * arrLength);
+          if (indexes.indexOf(i) === -1) {
+            indexes.push(i);
+            result.push(this.items[i]);
+          }
+        }
+        this.staticList = result;
+      }
+      return this.staticList;
     },
     saveToCart(item) {
       this.addToCart(item);
       this.popup = !this.popup;
-    },
-    onPopUpClick() {},
-    headerTitle() {
-      return (
-        this.title
-          .toLowerCase()
-          .split(' ')
-          .reverse()
-          // eslint-disable-next-line
-          .filter((element, index) => {
-            return index % 2 === 0;
-          })
-          .join(' ')
-      );
     },
   },
 };
@@ -162,10 +162,6 @@ export default {
 
 .nopadding {
   padding: 0px;
-}
-
-.right {
-  padding-right: 6.5px;
 }
 
 .await {
