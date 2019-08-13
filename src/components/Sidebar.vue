@@ -21,7 +21,7 @@
         class="w3-bar-item w3-button"
       >
         Jeans
-        <i class="fa fa-caret-down" v-on:click="onJeansClick"></i>
+        <i class="fa fa-caret-down arrow" v-on:click="onJeansClick" id="jeansArrow"></i>
       </router-link>
       <div class="w3-bar-block w3-hide w3-padding-large w3-medium w3-show" v-if="jeansList">
         <router-link
@@ -97,6 +97,15 @@ export default {
   methods: {
     onJeansClick() {
       this.jeansList = !this.jeansList;
+      if (this.jeansList) {
+        document
+          .getElementById('jeansArrow')
+          .setAttribute('style', 'transform: rotate(-180deg);');
+      } else {
+        document
+          .getElementById('jeansArrow')
+          .setAttribute('style', 'transform: rotate(0deg);');
+      }
     },
     onNewsletterClick() {
       this.newsletter = !this.newsletter;
@@ -113,5 +122,10 @@ export default {
 .router-link-active {
   color: rgb(0, 0, 0);
   background-color: rgb(241, 241, 241);
+}
+
+.arrow {
+  transition: all 0.5s ease-in-out;
+  transform: rotate(0deg);
 }
 </style>
