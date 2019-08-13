@@ -2,7 +2,7 @@
   <div>
     <div class="w3-hide-large" style="margin-top:83px"></div>
     <header class="w3-container w3-xlarge">
-      <p class="w3-left">Welcome</p>
+      <p class="w3-left">{{title}}</p>
       <p class="w3-right">
         <router-link :to="{name: 'cart'}" class="cart-link">
           <span class="cart">{{cartCount}} items</span>
@@ -11,7 +11,7 @@
         <i class="fa fa-search"></i>
       </p>
     </header>
-    <div class="w3-display-container w3-container">
+    <div class="w3-display-container w3-container" v-if="home">
       <img src="../assets/images/jeans.jpg" alt="Jeans" style="width:100%" />
       <div class="w3-display-topleft w3-text-white" style="padding:24px 48px">
         <h1 class="w3-jumbo w3-hide-small">New arrivals</h1>
@@ -23,6 +23,11 @@
       </div>
     </div>
     <div v-if="items">
+      <div
+        class="w3-container w3-text-grey"
+        style="font-size: 3em"
+        v-if="!home"
+      >Explore our {{headerTitle()}} collection</div>
       <div class="w3-container w3-text-grey" id="jeans">
         <p>{{rand}} items</p>
       </div>
@@ -46,43 +51,19 @@
       </div>
     </div>
     <div class="await" v-else>Retrieving items for you</div>
-    <div id="pop-up" class="w3-modal" style="display: block; z-index: 4" v-if="popup">
-      <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
-        <div class="w3-container w3-white w3-center">
-          <i
-            v-on:click="popup=false"
-            class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge"
-          ></i>
-          <h2 class="w3-wide">Great choice!</h2>
-          <p>You have added 1 product to your cart.</p>
-          <button
-            type="button"
-            class="w3-button w3-padding-large w3-red w3-margin-bottom"
-            v-on:click="popup=false"
-          >BACK TO STORE</button>
-          <button
-            type="button"
-            class="w3-button w3-padding-large w3-black w3-margin-bottom"
-            style="margin-left: 20px"
-            v-on:click="popup=false"
-          >
-            SEE YOUR SHOPPING CART
-            <i
-              class="fa fa-shopping-cart w3-margin-right right"
-              style="margin-left: 5px"
-            ></i>
-          </button>
-        </div>
-      </div>
-    </div>
+    <Popup v-if="popup" v-on:switch="popup=!popup" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
+import Popup from '@/components/Popup.vue';
 
 export default {
-  name: 'home',
+  name: 'category',
+  components: {
+    Popup,
+  },
   computed: {
     ...mapState(['items']),
     ...mapGetters(['cartCount']),

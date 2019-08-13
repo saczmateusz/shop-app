@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import Router from 'vue-router';
 import Home from './views/Home.vue';
+import Category from './views/Category.vue';
 import Cart from './views/Cart.vue';
 
 Vue.use(Router);
@@ -11,12 +12,13 @@ export default new Router({
   routes: [
     {
       path: '/',
-      redirect: '/Welcome',
-    },
-    {
-      path: '/:cat',
       name: 'home',
       component: Home,
+    },
+    {
+      path: '/category/:cat',
+      name: 'category',
+      component: Category,
     },
     {
       path: '/account/cart',
