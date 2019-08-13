@@ -4,15 +4,20 @@
     <header class="w3-container w3-xlarge">
       <p class="w3-left">Shopping cart</p>
       <p class="w3-right">
-        <router-link to="/" class="cart-link">
+        <router-link :to="{name: 'cart'}" class="cart-link">
           <span class="cart">{{cartCount}} items</span>
           <i class="fa fa-shopping-cart w3-margin-right right"></i>
         </router-link>
         <i class="fa fa-search"></i>
       </p>
     </header>
-    <div class="w3-container w3-text-grey" style="font-size: 3em">Chosen products</div>
-    <div class="cart-list" v-if="cart">
+    <div
+      class="w3-container w3-text-grey"
+      style="font-size: 3em"
+      v-if="cartCount > 0"
+    >Chosen products</div>
+    <div class="empty" v-else>Your cart is empty</div>
+    <div class="cart-list" v-if="cartCount > 0">
       <div
         class="w3-container w3-grayscale cart-item cart-trigger cart-flashing"
         v-for="(item, index) in cart"
@@ -20,12 +25,11 @@
       >
         <div class="w3-col cart-item-count">{{item.count}}×</div>
         <div class="w3-rest">
-          <img :src="item.image" style="width: 15%; display: inline" class="cart-img-trigger" />
+          <img :src="item.image" class="w3-left item-img" />
           <div class="w3-padding item-info">
             <p class="item-info-p">{{item.product_name}}</p>
-            <p class="item-info-p">
-              <b>{{item.price}}</b>
-            </p>
+            <p class="item-info-p w3-text-gray">{{item.price}}/pc.</p>
+            <p class="item-info-p">${{(item.price.slice(1) * item.count).toFixed(2)}}</p>
           </div>
           <div class="w3-right remove-button">
             <button class="w3-button w3-black" v-on:click="dropFromCart(item)">REMOVE</button>
@@ -33,23 +37,18 @@
         </div>
       </div>
     </div>
-    <div class="await" v-else>Retrieving items for you</div>
     <div class="w3-container w3-white w3-center">
       <button
         type="button"
         class="w3-button w3-left w3-black w3-margin-bottom"
         @click="$router.go(-1)"
       >BACK TO STORE</button>
-      <!-- <router-link :to="{name: 'cart'}"> -->
-      <button
-        type="button"
-        class="w3-button w3-right w3-green w3-margin-bottom"
-        @click="$router.go(-1)"
-      >
-        CHECKOUT
-        <i class="fa fa-arrow-right"></i>
-      </button>
-      <!-- </router-link> -->
+      <router-link :to="{name: 'checkout'}" v-if="cartCount > 0">
+        <button type="button" class="w3-button w3-right w3-green w3-margin-bottom">
+          CHECKOUT
+          <i class="fa fa-arrow-right"></i>
+        </button>
+      </router-link>
     </div>
   </div>
 </template>
@@ -63,12 +62,6 @@ export default {
     ...mapState(['cart']),
     ...mapGetters(['cartCount']),
   },
-  data() {
-    return {
-      popup: false,
-    };
-  },
-  mounted() {},
   methods: {
     ...mapActions(['dropFromCart']),
     getRandomItemsdd(items) {
@@ -87,32 +80,17 @@ export default {
       }
       return this.staticList;
     },
-    getRandomItemsddddd(items) {
-      if (this.staticList === null) {
-        const result = [];
-        const indexes = [];
-        const arrLength = 30;
-        while (result.length < items) {
-          const i = Math.floor(Math.random() * arrLength);
-          if (indexes.indexOf(i) === -1) {
-            indexes.push(i);
-            result.push(this.items[i]);
-          }
-        }
-        this.staticList = result;
-      }
-      return this.staticList;
-    },
   },
 };
 </script>
 
 <style>
-.await {
-  height: 200px;
+.empty {
+  height: 479.875px;
   font-size: 2em;
   color: grey;
   margin: 110px 0px;
+  padding: 200px;
   text-align: center;
 }
 
@@ -164,7 +142,7 @@ export default {
 
 .remove-button {
   display: inline;
-  padding: 50px 0px;
+  padding: 40px 0px;
 }
 
 .item-info {
@@ -175,5 +153,11 @@ export default {
   margin: 0px;
   font-weight: bold;
   font-size: 1.3em;
+  padding: 6px 0px;
+}
+
+.item-img {
+  width: 15%;
+  display: inline-block;
 }
 </style>

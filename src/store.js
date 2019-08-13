@@ -25,6 +25,9 @@ export default new Vuex.Store({
       if (state.cart[index].count === 1) state.cart.splice(index, 1);
       else state.cart[index].count -= 1;
     },
+    clearCart(state) {
+      state.cart = [];
+    },
   },
   actions: {
     setItems(context, payload) {
@@ -35,6 +38,9 @@ export default new Vuex.Store({
     },
     dropFromCart(context, payload) {
       context.commit('dropFromCart', payload);
+    },
+    clearCart(context) {
+      context.commit('clearCart');
     },
   },
   getters: {
