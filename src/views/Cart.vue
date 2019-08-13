@@ -18,10 +18,7 @@
           <div class="w3-container item trigger flashing">
             <img :src="item.image" style="width: 100%" class="img-trigger" />
             <div class="onHover">
-              <button class="w3-button w3-black" v-on:click="saveToCart(item)">
-                Buy now
-                <i class="fa fa-shopping-cart"></i>
-              </button>
+              <button class="w3-button w3-black" v-on:click="dropFromCart(item)">REMOVE</button>
             </div>
             <p>
               {{item.product_name}}
@@ -33,35 +30,6 @@
       </div>
     </div>
     <div class="await" v-else>Retrieving items for you</div>
-    <div id="pop-up" class="w3-modal" style="display: block; z-index: 4" v-if="popup">
-      <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
-        <div class="w3-container w3-white w3-center">
-          <i
-            v-on:click="popup=false"
-            class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge"
-          ></i>
-          <h2 class="w3-wide">Great choice!</h2>
-          <p>You have added 1 product to your cart.</p>
-          <button
-            type="button"
-            class="w3-button w3-padding-large w3-red w3-margin-bottom"
-            v-on:click="popup=false"
-          >BACK TO STORE</button>
-          <button
-            type="button"
-            class="w3-button w3-padding-large w3-black w3-margin-bottom"
-            style="margin-left: 20px"
-            v-on:click="popup=false"
-          >
-            SEE YOUR SHOPPING CART
-            <i
-              class="fa fa-shopping-cart w3-margin-right right"
-              style="margin-left: 5px"
-            ></i>
-          </button>
-        </div>
-      </div>
-    </div>
     <div class="w3-container w3-white w3-center">
       <button
         type="button"
@@ -93,26 +61,12 @@ export default {
   },
   data() {
     return {
-      rand: 4,
       popup: false,
     };
   },
   mounted() {},
   methods: {
-    ...mapActions(['addToCart']),
-    getRandomItems(items) {
-      const ret = [];
-      const indexes = [];
-      const arrLength = 30;
-      while (ret.length < items) {
-        const i = Math.floor(Math.random() * arrLength);
-        if (indexes.indexOf(i) === -1) {
-          indexes[indexes.length] = i;
-          ret[ret.length] = this.items[i];
-        }
-      }
-      return ret;
-    },
+    ...mapActions(['dropFromCart']),
     getRandomItemsdd(items) {
       if (this.staticList === null) {
         const result = [];
@@ -144,10 +98,6 @@ export default {
         this.staticList = result;
       }
       return this.staticList;
-    },
-    saveToCart(item) {
-      this.addToCart(item);
-      this.popup = !this.popup;
     },
   },
 };

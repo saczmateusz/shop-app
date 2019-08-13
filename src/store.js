@@ -15,6 +15,10 @@ export default new Vuex.Store({
     addToCart(state, payload) {
       state.cart.push(payload);
     },
+    dropFromCart(state, payload) {
+      const index = state.cart.indexOf(payload);
+      state.cart.splice(index, 1);
+    },
   },
   actions: {
     setItems(context, payload) {
@@ -22,6 +26,9 @@ export default new Vuex.Store({
     },
     addToCart(context, payload) {
       context.commit('addToCart', payload);
+    },
+    dropFromCart(context, payload) {
+      context.commit('dropFromCart', payload);
     },
   },
   getters: {
