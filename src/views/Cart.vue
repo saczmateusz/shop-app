@@ -11,20 +11,24 @@
         <i class="fa fa-search"></i>
       </p>
     </header>
-    <div v-if="cart">
-      <div class="w3-container w3-text-grey" style="font-size: 3em">Chosen products</div>
-      <div class="w3-container w3-grayscale nopadding">
-        <div class="w3-col l3 s6" v-for="(item, index) in cart" v-bind:key="index">
-          <div class="w3-container item trigger flashing">
-            <img :src="item.image" style="width: 100%" class="img-trigger" />
-            <div class="onHover">
-              <button class="w3-button w3-black" v-on:click="dropFromCart(item)">REMOVE</button>
-            </div>
-            <p>
-              {{item.product_name}}
-              <br />
+    <div class="w3-container w3-text-grey" style="font-size: 3em">Chosen products</div>
+    <div class="cart-list" v-if="cart">
+      <div
+        class="w3-container w3-grayscale cart-item cart-trigger cart-flashing"
+        v-for="(item, index) in cart"
+        v-bind:key="index"
+      >
+        <div class="w3-col cart-item-count">{{item.count}}×</div>
+        <div class="w3-rest">
+          <img :src="item.image" style="width: 15%; display: inline" class="cart-img-trigger" />
+          <div class="w3-padding item-info">
+            <p class="item-info-p">{{item.product_name}}</p>
+            <p class="item-info-p">
               <b>{{item.price}}</b>
             </p>
+          </div>
+          <div class="w3-right remove-button">
+            <button class="w3-button w3-black" v-on:click="dropFromCart(item)">REMOVE</button>
           </div>
         </div>
       </div>
@@ -104,16 +108,6 @@ export default {
 </script>
 
 <style>
-.item {
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 360px;
-}
-
-.nopadding {
-  padding: 0px;
-}
-
 .await {
   height: 200px;
   font-size: 2em;
@@ -122,33 +116,7 @@ export default {
   text-align: center;
 }
 
-.onHover {
-  display: none;
-  position: relative;
-  top: -100px;
-  left: 63px;
-  margin: -19px;
-  padding: 0px;
-}
-
-.onHover:hover {
-  display: block;
-}
-
-.trigger:hover + .onHover {
-  display: block;
-}
-
-.img-trigger:hover + .onHover {
-  display: block;
-}
-
-.trigger:hover {
-  position: relative;
-  top: -4px;
-}
-
-.flashing:active {
+.cart-flashing:active {
   animation: flash 0.3s;
 }
 
@@ -172,8 +140,40 @@ export default {
   font-weight: bolder;
 }
 
+.cart-list {
+  min-height: 600px;
+  margin: 16px 0px;
+}
+
 .cart-link {
   text-decoration: none;
   background-color: rgb(255, 255, 255);
+}
+
+.cart-item {
+  padding: 0px 16px;
+  height: 165px;
+}
+
+.cart-item-count {
+  font-size: 3em;
+  padding: 40px 0px;
+  width: 17%;
+  height: 100%;
+}
+
+.remove-button {
+  display: inline;
+  padding: 50px 0px;
+}
+
+.item-info {
+  display: inline-block;
+}
+
+.item-info-p {
+  margin: 0px;
+  font-weight: bold;
+  font-size: 1.3em;
 }
 </style>
