@@ -4,7 +4,7 @@
     <header class="w3-container w3-xlarge">
       <p class="w3-left">{{title}}</p>
       <p class="w3-right">
-        <router-link :to="{name: 'cart'}" class="cart-link">
+        <router-link to="/" class="cart-link">
           <span class="cart">{{cartCount}} items</span>
           <i class="fa fa-shopping-cart w3-margin-right right"></i>
         </router-link>
@@ -87,15 +87,10 @@
 import { mapState, mapActions, mapGetters } from 'vuex';
 
 export default {
-  name: 'home',
+  name: 'cart',
   computed: {
     ...mapState(['items']),
     ...mapGetters(['cartCount']),
-  },
-  watch: {
-    '$route.params.cat': function watch() {
-      this.reload();
-    },
   },
   data() {
     return {
@@ -106,7 +101,6 @@ export default {
     };
   },
   mounted() {
-    this.title = this.$route.params.cat;
     if (this.title === 'Welcome') {
       this.home = true;
     } else {
@@ -130,7 +124,6 @@ export default {
       return ret;
     },
     reload() {
-      this.title = this.$route.params.cat;
       if (this.title === 'Welcome') {
         this.home = true;
       } else {
