@@ -46,43 +46,19 @@
       </div>
     </div>
     <div class="await" v-else>Retrieving items for you</div>
-    <div id="pop-up" class="w3-modal" style="display: block; z-index: 4" v-if="popup">
-      <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
-        <div class="w3-container w3-white w3-center">
-          <i
-            v-on:click="popup=false"
-            class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge"
-          ></i>
-          <h2 class="w3-wide">Great choice!</h2>
-          <p>You have added 1 product to your cart.</p>
-          <button
-            type="button"
-            class="w3-button w3-padding-large w3-red w3-margin-bottom"
-            v-on:click="popup=false"
-          >BACK TO STORE</button>
-          <button
-            type="button"
-            class="w3-button w3-padding-large w3-black w3-margin-bottom"
-            style="margin-left: 20px"
-            v-on:click="popup=false"
-          >
-            SEE YOUR SHOPPING CART
-            <i
-              class="fa fa-shopping-cart w3-margin-right right"
-              style="margin-left: 5px"
-            ></i>
-          </button>
-        </div>
-      </div>
-    </div>
+    <Popup v-if="popup" v-on:switch="popup=!popup" />
   </div>
 </template>
 
 <script>
 import { mapState, mapActions, mapGetters } from 'vuex';
+import Popup from '@/components/Popup.vue';
 
 export default {
   name: 'home',
+  components: {
+    Popup,
+  },
   computed: {
     ...mapState(['items']),
     ...mapGetters(['cartCount']),
