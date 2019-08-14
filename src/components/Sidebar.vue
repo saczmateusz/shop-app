@@ -59,56 +59,34 @@
       >Shoes</router-link>
     </div>
     <a href="#footer" class="w3-bar-item w3-button w3-padding">Contact</a>
-    <a class="w3-bar-item w3-button w3-padding" v-on:click="onNewsletterClick">Newsletter</a>
+    <a class="w3-bar-item w3-button w3-padding" v-on:click="popup=!popup">Newsletter</a>
     <a href="#footer" class="w3-bar-item w3-button w3-padding">Subscribe</a>
-
-    <div id="newsletter" class="w3-modal" style="display: block; z-index: 4" v-if="newsletter">
-      <div class="w3-modal-content w3-animate-zoom" style="padding:32px">
-        <div class="w3-container w3-white w3-center">
-          <i
-            v-on:click="onNewsletterClick"
-            class="fa fa-remove w3-right w3-button w3-transparent w3-xxlarge"
-          ></i>
-          <h2 class="w3-wide">NEWSLETTER</h2>
-          <p>Join our mailing list to receive updates on new arrivals and special offers.</p>
-          <p>
-            <input class="w3-input w3-border" type="text" placeholder="Enter e-mail" />
-          </p>
-          <button
-            type="button"
-            class="w3-button w3-padding-large w3-red w3-margin-bottom"
-            v-on:click="onNewsletterClick"
-          >Subscribe</button>
-        </div>
-      </div>
-    </div>
+    <Popup v-if="popup" v-on:switch="popup=!popup" type="newsletter" />
   </div>
 </template>
 
 <script>
+import Popup from '@/components/Popup.vue';
+
 export default {
   name: 'Sidebar',
+  components: {
+    Popup,
+  },
   data() {
     return {
       jeansList: false,
-      newsletter: false,
+      popup: false,
     };
   },
   methods: {
     onJeansClick() {
       this.jeansList = !this.jeansList;
       if (this.jeansList) {
-        document
-          .getElementById('jeansArrow')
-          .setAttribute('style', 'transform: rotate(-180deg);');
+        document.getElementById('jeansArrow').setAttribute('style', 'transform: rotate(-180deg);');
       } else {
-        document
-          .getElementById('jeansArrow')
-          .setAttribute('style', 'transform: rotate(0deg);');
+        document.getElementById('jeansArrow').setAttribute('style', 'transform: rotate(0deg);');
       }
-    },
-    onNewsletterClick() {
-      this.newsletter = !this.newsletter;
     },
   },
 };

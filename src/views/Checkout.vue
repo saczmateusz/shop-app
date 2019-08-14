@@ -91,7 +91,7 @@
         <i class="fa fa-arrow-right"></i>
       </button>
     </div>
-    <Popup v-if="popup" v-on:switch="popup=!popup" />
+    <Popup v-if="popup" v-on:switch="popup=!popup" type="purchase" />
   </div>
 </template>
 

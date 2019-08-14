@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="await" v-else>Retrieving items for you</div>
-    <Popup v-if="popup" v-on:switch="popup=!popup" />
+    <Popup v-if="popup" v-on:switch="popup=!popup" type="addItem" />
   </div>
 </template>
 
