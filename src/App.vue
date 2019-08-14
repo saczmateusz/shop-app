@@ -60,7 +60,6 @@ export default {
 };
 </script>
 
-
 <style>
 .content {
   max-width: 1200px;
@@ -79,5 +78,100 @@ h6,
 
 .w3-sidebar a {
   font-family: 'Roboto', sans-serif;
+}
+
+.cart {
+  font-size: 0.8em;
+  font-weight: bolder;
+}
+
+.list {
+  min-height: 600px;
+  margin: 16px 0px;
+}
+
+.link {
+  text-decoration: none;
+  background-color: rgb(255, 255, 255);
+}
+
+.link:hover {
+  color: rgb(100, 100, 100);
+}
+
+.tag {
+  position: absolute;
+  top: 0;
+}
+
+.item {
+  padding-left: 16px;
+  padding-right: 16px;
+  min-height: 360px;
+}
+
+.nopadding {
+  padding: 0px;
+}
+
+.right {
+  padding-right: 6.5px;
+}
+
+.await {
+  height: 200px;
+  font-size: 2em;
+  color: grey;
+  margin: 110px 0px;
+  text-align: center;
+}
+
+.on-hover {
+  display: none;
+  position: relative;
+  top: -100px;
+  left: 63px;
+  margin: -19px;
+  padding: 0px;
+}
+
+.on-hover:hover {
+  display: block;
+}
+
+.trigger:hover + .on-hover {
+  display: block;
+}
+
+.img-trigger:hover + .on-hover {
+  display: block;
+}
+
+.trigger:hover {
+  position: relative;
+  top: -4px;
+}
+
+.flashing {
+  position: relative;
+}
+
+.flashing:active {
+  animation: flash 0.1s;
+}
+
+@keyframes flash {
+  0% {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  50% {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+  100% {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
 }
 </style>

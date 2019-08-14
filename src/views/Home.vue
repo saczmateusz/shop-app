@@ -4,9 +4,9 @@
     <header class="w3-container w3-xlarge">
       <p class="w3-left">Welcome</p>
       <p class="w3-right">
-        <router-link :to="{name: 'cart'}" class="cart-link">
-          <span class="checkout" v-if="cartCount !== 1">{{cartCount}} items</span>
-          <span class="checkout" v-if="cartCount === 1">{{cartCount}} item</span>
+        <router-link :to="{name: 'cart'}" class="link">
+          <span class="cart" v-if="cartCount !== 1">{{cartCount}} items</span>
+          <span class="cart" v-if="cartCount === 1">{{cartCount}} item</span>
           <i class="fa fa-shopping-cart w3-margin-right right"></i>
         </router-link>
         <i class="fa fa-search"></i>
@@ -24,16 +24,16 @@
       </div>
     </div>
     <div v-if="items">
-      <div class="w3-container w3-text-grey" id="jeans">
+      <div class="w3-container w3-text-grey">
         <p>{{rand}} items</p>
       </div>
       <div class="w3-container w3-grayscale nopadding">
         <div class="w3-col l3 s6" v-for="(item, index) in getRandomItems(rand)" v-bind:key="index">
           <div class="w3-container item trigger flashing">
-            <span class="w3-tag tag" v-if="Math.floor(Math.random() * 10) < 2">New</span>
-            <span class="w3-tag tag" v-else-if="Math.floor(Math.random() * 10) >= 9">Sale</span>
+            <span class="w3-tag tag" v-if="tagNew.indexOf(item.id) !== -1">New</span>
+            <span class="w3-tag tag" v-else-if="tagSale.indexOf(item.id) !== -1">Sale</span>
             <img :src="item.image" style="width: 100%" class="img-trigger" />
-            <div class="onHover">
+            <div class="on-hover">
               <button class="w3-button w3-black" v-on:click="saveToCart(item)">
                 Buy now
                 <i class="fa fa-shopping-cart"></i>
@@ -74,7 +74,13 @@ export default {
       rand: null,
       popup: false,
       staticList: null,
+      tagNew: [],
+      tagSale: [],
     };
+  },
+  beforeMount() {
+    this.tagNew = [1, 8, 12];
+    this.tagSale = [16, 21, 29];
   },
   mounted() {
     this.staticList = null;
@@ -105,95 +111,3 @@ export default {
   },
 };
 </script>
-
-<style>
-.item {
-  padding-left: 16px;
-  padding-right: 16px;
-  min-height: 360px;
-}
-
-.nopadding {
-  padding: 0px;
-}
-
-.right {
-  padding-right: 6.5px;
-}
-
-.await {
-  height: 200px;
-  font-size: 2em;
-  color: grey;
-  margin: 110px 0px;
-  text-align: center;
-}
-
-.onHover {
-  display: none;
-  position: relative;
-  top: -100px;
-  left: 63px;
-  margin: -19px;
-  padding: 0px;
-}
-
-.onHover:hover {
-  display: block;
-}
-
-.trigger:hover + .onHover {
-  display: block;
-}
-
-.img-trigger:hover + .onHover {
-  display: block;
-}
-
-.trigger:hover {
-  position: relative;
-  top: -4px;
-}
-
-.flashing {
-  position: relative;
-}
-
-.flashing:active {
-  animation: flash 0.3s;
-}
-
-@keyframes flash {
-  0% {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-  50% {
-    padding-left: 19px;
-    padding-right: 19px;
-  }
-  100% {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-
-.cart {
-  font-size: 0.8em;
-  font-weight: bolder;
-}
-
-.cart-link {
-  text-decoration: none;
-  background-color: rgb(255, 255, 255);
-}
-
-.cart-link:hover {
-  color: rgb(220, 220, 220);
-}
-
-.tag {
-  position: absolute;
-  top: 0;
-}
-</style>

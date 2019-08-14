@@ -4,16 +4,16 @@
     <header class="w3-container w3-xlarge">
       <p class="w3-left">Checkout</p>
       <p class="w3-right">
-        <router-link :to="{name: 'cart'}" class="checkout-link">
-          <span class="checkout" v-if="cartCount !== 1">{{cartCount}} items</span>
-          <span class="checkout" v-if="cartCount === 1">{{cartCount}} item</span>
+        <router-link :to="{name: 'cart'}" class="link">
+          <span class="cart" v-if="cartCount !== 1">{{cartCount}} items</span>
+          <span class="cart" v-if="cartCount === 1">{{cartCount}} item</span>
           <i class="fa fa-shopping-cart w3-margin-right right"></i>
         </router-link>
         <i class="fa fa-search"></i>
       </p>
     </header>
     <div class="w3-container w3-text-grey" style="font-size: 3em">Checkout & Payment</div>
-    <div class="checkout-list">
+    <div class="list">
       <div
         class="w3-container w3-grayscale checkout-item"
         v-for="(item, index) in cart"
@@ -23,9 +23,11 @@
         <div class="w3-rest checkout-item-info">
           <div style="display: inline-block">
             <span class="checkout-item-info-p">{{item.product_name}}</span>
-            <span class="checkout-item-info-p w3-text-gray">({{item.price}}/pc.)</span>
+            <span class="w3-text-gray checkout-item-info-p">({{item.price}}/pc.)</span>
           </div>
-          <div class="w3-right ch-item-sum">${{(item.price.slice(1) * item.count).toFixed(2)}}</div>
+          <div class="w3-right checkout-item-sum">
+            ${{(item.price.slice(1) * item.count).toFixed(2)}}
+          </div>
         </div>
       </div>
       <div class="w3-container">
@@ -114,7 +116,6 @@ export default {
       popup: false,
     };
   },
-  mounted() {},
   methods: {
     ...mapActions(['clearCart']),
     submit() {
@@ -126,53 +127,6 @@ export default {
 </script>
 
 <style>
-.empty {
-  height: 479.875px;
-  font-size: 2em;
-  color: grey;
-  margin: 110px 0px;
-  padding: 200px;
-  text-align: center;
-}
-
-.checkout-flashing:active {
-  animation: flash 0.3s;
-}
-
-@keyframes flash {
-  0% {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-  50% {
-    padding-left: 19px;
-    padding-right: 19px;
-  }
-  100% {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-
-.checkout {
-  font-size: 0.8em;
-  font-weight: bolder;
-}
-
-.checkout-list {
-  min-height: 600px;
-  margin: 16px 0px;
-}
-
-.checkout-link {
-  text-decoration: none;
-  background-color: rgb(255, 255, 255);
-}
-
-.checkout-link:hover {
-  color: rgb(220, 220, 220);
-}
-
 .checkout-item {
   padding: 0px 16px;
   height: 50px;
@@ -186,7 +140,7 @@ export default {
   font-weight: bold;
 }
 
-.ch-item-sum {
+.checkout-item-sum {
   display: inline;
   margin: 0px;
   font-weight: bold;

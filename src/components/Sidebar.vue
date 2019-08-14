@@ -1,6 +1,6 @@
 <template>
   <div class="w3-sidebar w3-bar-block w3-white w3-collapse w3-top" style="width: 250px">
-    <router-link class="rout" :to="{ name: 'home' }">
+    <router-link class="link" :to="{ name: 'home' }">
       <div class="w3-container w3-display-container w3-padding-16">
         <h3 class="w3-wide">
           <b>LOGO</b>
@@ -22,35 +22,35 @@
         id="jeans-button"
       >
         Jeans
-        <i class="fa fa-caret-down arrow" v-on:click="onJeansClick" id="jeansArrow"></i>
+        <i class="fa fa-caret-down arrow" v-on:click="onJeansClick" id="jeans-arrow"></i>
       </router-link>
       <div class="w3-bar-block w3-hide w3-padding-large w3-medium w3-show" v-if="jeansList">
         <router-link
           :to="{ name: 'category', params: { cat: 'Jeans | skinny' }}"
           class="w3-bar-item w3-button"
         >
-          <i class="fa fa-caret-right w3-margin-right" v-if="test() === 'skinny'"></i>
+          <i class="fa fa-caret-right w3-margin-right" v-if="showArrow() === 'skinny'"></i>
           Skinny
         </router-link>
         <router-link
           :to="{ name: 'category', params: { cat: 'Jeans | relaxed' }}"
           class="w3-bar-item w3-button"
         >
-          <i class="fa fa-caret-right w3-margin-right" v-if="test() === 'relaxed'"></i>
+          <i class="fa fa-caret-right w3-margin-right" v-if="showArrow() === 'relaxed'"></i>
           Relaxed
         </router-link>
         <router-link
           :to="{ name: 'category', params: { cat: 'Jeans | bootcut' }}"
           class="w3-bar-item w3-button"
         >
-          <i class="fa fa-caret-right w3-margin-right" v-if="test() === 'bootcut'"></i>
+          <i class="fa fa-caret-right w3-margin-right" v-if="showArrow() === 'bootcut'"></i>
           Bootcut
         </router-link>
         <router-link
           :to="{ name: 'category', params: { cat: 'Jeans | straight' }}"
           class="w3-bar-item w3-button"
         >
-          <i class="fa fa-caret-right w3-margin-right" v-if="test() === 'straight'"></i>
+          <i class="fa fa-caret-right w3-margin-right" v-if="showArrow() === 'straight'"></i>
           Straight
         </router-link>
       </div>
@@ -88,7 +88,7 @@ export default {
   },
   watch: {
     '$route.params.cat': function watch() {
-      this.test();
+      this.showArrow();
     },
   },
   data() {
@@ -101,12 +101,12 @@ export default {
     onJeansClick() {
       this.jeansList = !this.jeansList;
       if (this.jeansList) {
-        document.getElementById('jeansArrow').setAttribute('style', 'transform: rotate(-180deg);');
+        document.getElementById('jeans-arrow').setAttribute('style', 'transform: rotate(-180deg);');
       } else {
-        document.getElementById('jeansArrow').setAttribute('style', 'transform: rotate(0deg);');
+        document.getElementById('jeans-arrow').setAttribute('style', 'transform: rotate(0deg);');
       }
     },
-    test() {
+    showArrow() {
       if (this.$route.name === 'category') {
         if (this.$route.params.cat.split(' ')[0].toString() === 'Jeans') {
           document
@@ -122,10 +122,6 @@ export default {
 </script>
 
 <style>
-.rout {
-  text-decoration: none;
-}
-
 .router-link-active {
   color: rgb(0, 0, 0);
   background-color: rgb(241, 241, 241);
@@ -134,13 +130,5 @@ export default {
 .arrow {
   transition: all 0.5s ease-in-out;
   transform: rotate(0deg);
-}
-
-.jeans-arr {
-  display: none;
-}
-
-.jeans-sub:focus + .jeans-arr {
-  display: block;
 }
 </style>

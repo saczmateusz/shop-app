@@ -4,9 +4,9 @@
     <header class="w3-container w3-xlarge">
       <p class="w3-left">Shopping cart</p>
       <p class="w3-right">
-        <router-link :to="{name: 'cart'}" class="cart-link">
-          <span class="checkout" v-if="cartCount !== 1">{{cartCount}} items</span>
-          <span class="checkout" v-if="cartCount === 1">{{cartCount}} item</span>
+        <router-link :to="{name: 'cart'}" class="link">
+          <span class="cart" v-if="cartCount !== 1">{{cartCount}} items</span>
+          <span class="cart" v-if="cartCount === 1">{{cartCount}} item</span>
           <i class="fa fa-shopping-cart w3-margin-right right"></i>
         </router-link>
         <i class="fa fa-search"></i>
@@ -18,21 +18,21 @@
       v-if="cartCount > 0"
     >Chosen products</div>
     <div class="empty" v-else>Your cart is empty</div>
-    <div class="cart-list" v-if="cartCount > 0">
+    <div class="list" v-if="cartCount > 0">
       <div
-        class="w3-container w3-grayscale cart-item cart-trigger cart-flashing"
+        class="w3-container w3-grayscale cart-item flashing"
         v-for="(item, index) in cart"
         v-bind:key="index"
       >
         <div class="w3-col cart-item-count">{{item.count}}×</div>
         <div class="w3-rest">
-          <img :src="item.image" class="w3-left item-img" />
-          <div class="w3-padding item-info">
+          <img :src="item.image" class="w3-left cart-item-img" />
+          <div class="w3-padding cart-item-info">
             <router-link :to="{name: 'product', params: { id: item.id }}" class="link">
-              <p class="item-info-p">{{item.product_name}}</p>
+              <p class="cart-item-info-p">{{item.product_name}}</p>
             </router-link>
-            <p class="item-info-p w3-text-gray">{{item.price}}/pc.</p>
-            <p class="item-info-p">${{(item.price.slice(1) * item.count).toFixed(2)}}</p>
+            <p class="cart-item-info-p w3-text-gray">{{item.price}}/pc.</p>
+            <p class="cart-item-info-p">${{(item.price.slice(1) * item.count).toFixed(2)}}</p>
           </div>
           <div class="w3-right remove-button">
             <button class="w3-button w3-black" v-on:click="dropFromCart(item)">REMOVE</button>
@@ -67,22 +67,6 @@ export default {
   },
   methods: {
     ...mapActions(['dropFromCart']),
-    getRandomItemsdd(items) {
-      if (this.staticList === null) {
-        const result = [];
-        const indexes = [];
-        const arrLength = 30;
-        while (result.length < items) {
-          const i = Math.floor(Math.random() * arrLength);
-          if (indexes.indexOf(i) === -1) {
-            indexes[indexes.length] = i;
-            result[result.length] = this.items[i];
-          }
-        }
-        this.staticList = result;
-      }
-      return this.staticList;
-    },
   },
 };
 </script>
@@ -97,44 +81,6 @@ export default {
   text-align: center;
 }
 
-.cart-flashing:active {
-  animation: flash 0.3s;
-}
-
-@keyframes flash {
-  0% {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-  50% {
-    padding-left: 19px;
-    padding-right: 19px;
-  }
-  100% {
-    padding-left: 16px;
-    padding-right: 16px;
-  }
-}
-
-.cart {
-  font-size: 0.8em;
-  font-weight: bolder;
-}
-
-.cart-list {
-  min-height: 600px;
-  margin: 16px 0px;
-}
-
-.cart-link {
-  text-decoration: none;
-  background-color: rgb(255, 255, 255);
-}
-
-.cart-link:hover {
-  color: rgb(220, 220, 220);
-}
-
 .cart-item {
   padding: 0px 16px;
   height: 165px;
@@ -147,24 +93,24 @@ export default {
   height: 100%;
 }
 
-.remove-button {
-  display: inline;
-  padding: 40px 0px;
-}
-
-.item-info {
+.cart-item-info {
   display: inline-block;
 }
 
-.item-info-p {
+.cart-item-info-p {
   margin: 0px;
   font-weight: bold;
   font-size: 1.3em;
   padding: 6px 0px;
 }
 
-.item-img {
+.cart-item-img {
   width: 15%;
   display: inline-block;
+}
+
+.remove-button {
+  display: inline;
+  padding: 40px 0px;
 }
 </style>
