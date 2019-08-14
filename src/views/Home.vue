@@ -5,7 +5,8 @@
       <p class="w3-left">Welcome</p>
       <p class="w3-right">
         <router-link :to="{name: 'cart'}" class="cart-link">
-          <span class="cart">{{cartCount}} items</span>
+          <span class="checkout" v-if="cartCount !== 1">{{cartCount}} items</span>
+          <span class="checkout" v-if="cartCount === 1">{{cartCount}} item</span>
           <i class="fa fa-shopping-cart w3-margin-right right"></i>
         </router-link>
         <i class="fa fa-search"></i>
@@ -182,6 +183,10 @@ export default {
 .cart-link {
   text-decoration: none;
   background-color: rgb(255, 255, 255);
+}
+
+.cart-link:hover {
+  color: rgb(220, 220, 220);
 }
 
 .tag {
