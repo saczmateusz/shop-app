@@ -29,6 +29,8 @@
       <div class="w3-container w3-grayscale nopadding">
         <div class="w3-col l3 s6" v-for="(item, index) in getRandomItems(rand)" v-bind:key="index">
           <div class="w3-container item trigger flashing">
+            <span class="w3-tag tag" v-if="Math.floor(Math.random() * 10) < 2">New</span>
+            <span class="w3-tag tag" v-else-if="Math.floor(Math.random() * 10) >= 9">Sale</span>
             <img :src="item.image" style="width: 100%" class="img-trigger" />
             <div class="onHover">
               <button class="w3-button w3-black" v-on:click="saveToCart(item)">
@@ -149,6 +151,10 @@ export default {
   top: -4px;
 }
 
+.flashing {
+  position: relative;
+}
+
 .flashing:active {
   animation: flash 0.3s;
 }
@@ -176,5 +182,10 @@ export default {
 .cart-link {
   text-decoration: none;
   background-color: rgb(255, 255, 255);
+}
+
+.tag {
+  position: absolute;
+  top: 0;
 }
 </style>
