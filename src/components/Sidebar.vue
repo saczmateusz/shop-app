@@ -107,7 +107,7 @@ export default {
       }
     },
     test() {
-      if (this.$route.path !== '/') {
+      if (this.$route.name === 'category') {
         if (this.$route.params.cat.split(' ')[0].toString() === 'Jeans') {
           document
             .getElementById('jeans-button')

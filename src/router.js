@@ -4,6 +4,7 @@ import Home from './views/Home.vue';
 import Category from './views/Category.vue';
 import Cart from './views/Cart.vue';
 import Checkout from './views/Checkout.vue';
+import Product from './views/Product.vue';
 
 Vue.use(Router);
 
@@ -30,6 +31,11 @@ export default new Router({
       path: '/checkout',
       name: 'checkout',
       component: Checkout,
+    },
+    {
+      path: '/product/:id',
+      name: 'product',
+      component: Product,
     },
   ],
   scrollBehavior() {

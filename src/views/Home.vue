@@ -40,7 +40,10 @@
               </button>
             </div>
             <p>
-              {{item.product_name}}
+              <router-link
+                :to="{name: 'product', params: { id: item.id }}"
+                class="link"
+              >{{item.product_name}}</router-link>
               <br />
               <b>{{item.price}}</b>
             </p>

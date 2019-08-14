@@ -28,7 +28,9 @@
         <div class="w3-rest">
           <img :src="item.image" class="w3-left item-img" />
           <div class="w3-padding item-info">
-            <p class="item-info-p">{{item.product_name}}</p>
+            <router-link :to="{name: 'product', params: { id: item.id }}" class="link">
+              <p class="item-info-p">{{item.product_name}}</p>
+            </router-link>
             <p class="item-info-p w3-text-gray">{{item.price}}/pc.</p>
             <p class="item-info-p">${{(item.price.slice(1) * item.count).toFixed(2)}}</p>
           </div>
