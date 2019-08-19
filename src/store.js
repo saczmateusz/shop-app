@@ -11,6 +11,7 @@ export default new Vuex.Store({
   mutations: {
     setItems(state, payload) {
       state.items = payload;
+      localStorage.setItem('shopItems', JSON.stringify(payload));
     },
     addToCart(state, payload) {
       // eslint-disable-next-line
@@ -19,13 +20,19 @@ export default new Vuex.Store({
       });
       if (index === -1) state.cart.push({ ...payload, count: 1 });
       else state.cart[index].count += 1;
+      localStorage.setItem('cartItems', JSON.stringify(state.cart));
     },
     dropFromCart(state, payload) {
       const index = state.cart.indexOf(payload);
       state.cart.splice(index, 1);
+      localStorage.setItem('cartItems', JSON.stringify(state.cart));
     },
     clearCart(state) {
       state.cart = [];
+      localStorage.setItem('cartItems', JSON.stringify(state.cart));
+    },
+    setCart(state, payload) {
+      state.cart = payload;
     },
   },
   actions: {
@@ -40,6 +47,9 @@ export default new Vuex.Store({
     },
     clearCart(context) {
       context.commit('clearCart');
+    },
+    setCart(context, payload) {
+      context.commit('setCart', payload);
     },
   },
   getters: {

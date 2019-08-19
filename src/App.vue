@@ -40,13 +40,19 @@ export default {
   computed: {
     ...mapState(['items']),
   },
-  async beforeCreate() {
-    await API.getData().then((result) => {
-      this.setItems(result);
-    });
+  beforeMount() {
+    if (localStorage.getItem('shopItems') !== null) this.setItems(JSON.parse(localStorage.getItem('shopItems')));
+    else {
+      API.getData().then((result) => {
+        this.setItems(result);
+      });
+    }
+    if (localStorage.getItem('cartItems') !== null) {
+      this.setCart(JSON.parse(localStorage.getItem('cartItems')));
+    }
   },
   methods: {
-    ...mapActions(['setItems']),
+    ...mapActions(['setItems', 'setCart']),
     w3_open() {
       document.getElementById('sidebar').style.display = 'block';
       document.getElementById('overlay').style.display = 'block';
