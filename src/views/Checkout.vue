@@ -116,6 +116,11 @@ export default {
       popup: false,
     };
   },
+  mounted() {
+    if (this.cartCount === 0) {
+      this.$router.go(-1);
+    }
+  },
   methods: {
     ...mapActions(['clearCart']),
     submit() {
