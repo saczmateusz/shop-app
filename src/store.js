@@ -22,8 +22,7 @@ export default new Vuex.Store({
     },
     dropFromCart(state, payload) {
       const index = state.cart.indexOf(payload);
-      if (state.cart[index].count === 1) state.cart.splice(index, 1);
-      else state.cart[index].count -= 1;
+      state.cart.splice(index, 1);
     },
     clearCart(state) {
       state.cart = [];
