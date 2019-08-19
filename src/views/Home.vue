@@ -32,9 +32,19 @@
           <div class="w3-container item trigger flashing">
             <span class="w3-tag tag" v-if="tagNew.indexOf(item.id) !== -1">New</span>
             <span class="w3-tag tag" v-else-if="tagSale.indexOf(item.id) !== -1">Sale</span>
-            <img :src="item.image" style="width: 100%" class="img-trigger" />
+            <router-link
+              :to="{name: 'product', params: { id: item.id }}"
+              class="link img-trigger"
+              style="z-index: 2"
+            >
+              <img
+                :src="item.image"
+                style="width: 100%"
+                :href="{name: 'product', params: { id: item.id }}"
+              />
+            </router-link>
             <div class="on-hover">
-              <button class="w3-button w3-black" v-on:click="saveToCart(item)">
+              <button class="w3-button w3-black" style="z-index: 3" v-on:click="saveToCart(item)">
                 Buy now
                 <i class="fa fa-shopping-cart"></i>
               </button>

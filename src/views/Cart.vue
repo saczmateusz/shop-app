@@ -26,7 +26,9 @@
       >
         <div class="w3-col cart-item-count">{{item.count}}×</div>
         <div class="w3-rest">
-          <img :src="item.image" class="w3-left cart-item-img" />
+          <router-link :to="{name: 'product', params: { id: item.id }}" class="link">
+            <img :src="item.image" class="w3-left cart-item-img" />
+          </router-link>
           <div class="w3-padding cart-item-info">
             <router-link :to="{name: 'product', params: { id: item.id }}" class="link">
               <p class="cart-item-info-p">{{item.product_name}}</p>
