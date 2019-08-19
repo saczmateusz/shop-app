@@ -39,44 +39,64 @@
       </div>
       <div class="w3-container">
         <span class="form-header">Enter your address and credit card data</span>
-        <div class="w3-quarter" style="padding-right: 16px">
-          <span class="form-subtitle">Your address</span>
-          <div class="form-input">
-            <label for="name">Name</label>
-            <input type="text" id="name" placeholder="John Doe" />
+        <form>
+          <div class="w3-quarter" style="padding-right: 16px">
+            <span class="form-subtitle">Your address</span>
+            <div class="form-input">
+              <label for="name">Name</label>
+              <input type="text" id="name" placeholder="John Doe" v-model="customer.name" />
+            </div>
+            <div class="form-input">
+              <label for="name">Phone</label>
+              <input type="text" id="phone" placeholder="0-100-200-300" v-model="customer.phone" />
+            </div>
+            <div class="form-input">
+              <label for="name">Postal Code</label>
+              <input type="text" id="postal-code" placeholder="10-200" v-model="customer.code" />
+            </div>
+            <div class="form-input">
+              <label for="name">Town</label>
+              <input type="text" id="town" placeholder="New York" v-model="customer.town" />
+            </div>
+            <div class="form-input">
+              <label for="name">Street</label>
+              <input
+                type="text"
+                id="street"
+                placeholder="1st Street Avenue"
+                v-model="customer.street"
+              />
+            </div>
           </div>
-          <div class="form-input">
-            <label for="name">Phone</label>
-            <input type="text" id="phone" placeholder="0-100-200-300" />
+          <div class="w3-quarter" style="padding-right: 16px">
+            <span class="form-subtitle">Credit card</span>
+            <div class="form-input">
+              <label for="name">Number</label>
+              <input
+                type="text"
+                id="number"
+                placeholder="---- ---- ---- ----"
+                v-model="customer.card.number"
+              />
+            </div>
+            <div class="form-input">
+              <label for="name">Expiry date</label>
+              <input
+                type="text"
+                id="expiration"
+                placeholder="--/----"
+                v-model="customer.card.expiry"
+              />
+            </div>
+            <div class="form-input">
+              <label for="name">CVV</label>
+              <input type="text" id="cvv" placeholder="---" v-model="customer.card.cvv" />
+            </div>
           </div>
-          <div class="form-input">
-            <label for="name">Postal Code</label>
-            <input type="text" id="postal-code" placeholder="10-200" />
-          </div>
-          <div class="form-input">
-            <label for="name">Town</label>
-            <input type="text" id="town" placeholder="New York" />
-          </div>
-          <div class="form-input">
-            <label for="name">Street</label>
-            <input type="text" id="street" placeholder="1st Street Avenue" />
-          </div>
-        </div>
-        <div class="w3-quarter" style="padding-right: 16px">
-          <span class="form-subtitle">Credit card</span>
-          <div class="form-input">
-            <label for="name">Number</label>
-            <input type="text" id="number" placeholder="---- ---- ---- ----" />
-          </div>
-          <div class="form-input">
-            <label for="name">Expiry date</label>
-            <input type="text" id="expiration" placeholder="--/----" />
-          </div>
-          <div class="form-input">
-            <label for="name">CVV</label>
-            <input type="text" id="cvv" placeholder="---" />
-          </div>
-        </div>
+        </form>
+      </div>
+      <div class="w3-container">
+        <h6 id="invalid" class="alert-invalid"></h6>
       </div>
     </div>
     <div class="w3-container w3-white w3-center">
@@ -87,8 +107,9 @@
       >BACK TO SHOPPING CART</button>
       <button
         type="button"
+        id="order"
         class="w3-button w3-right w3-green w3-margin-bottom"
-        v-on:click="submit()"
+        v-on:click="validate()"
       >
         ORDER & PAY
         <i class="fa fa-arrow-right"></i>
@@ -114,6 +135,19 @@ export default {
   data() {
     return {
       popup: false,
+      customer: {
+        name: '',
+        phone: '',
+        code: '',
+        town: '',
+        street: '',
+        card: {
+          number: '',
+          expiry: '',
+          cvv: '',
+        },
+      },
+      button: false,
     };
   },
   mounted() {
@@ -126,6 +160,87 @@ export default {
     submit() {
       this.clearCart();
       this.popup = !this.popup;
+    },
+    validate() {
+      let valid = 0;
+      valid += this.validateString(this.customer.name, 'name');
+      valid += this.validatePhone(this.customer.phone);
+      valid += this.validateCode(this.customer.code);
+      valid += this.validateString(this.customer.town, 'town');
+      valid += this.validateString(this.customer.street, 'street');
+      valid += this.validateNumber(this.customer.card.number);
+      valid += this.validateExpiry(this.customer.card.expiry);
+      valid += this.validateCVV(this.customer.card.cvv);
+      if (valid === 8) {
+        document.getElementById('invalid').innerHTML = '';
+        this.submit();
+      } else document.getElementById('invalid').innerHTML = 'Please enter all necessary informations and match the format shown in placeholder!';
+    },
+    validateString(argument, id) {
+      if (argument.length === 0) {
+        document.getElementById(id).style = 'border-color: #e74c3c;';
+        return 0;
+      }
+      document.getElementById(id).style = 'border-color:#00bc8c;';
+      return 1;
+    },
+    validatePhone(argument) {
+      const phone = argument
+        .split('')
+        .filter(element => element !== '-')
+        .join('');
+      if (phone.length === 10 && !Number.isNaN(phone)) {
+        document.getElementById('phone').style = 'border-color:#00bc8c;';
+        return 1;
+      }
+      document.getElementById('phone').style = 'border-color: #e74c3c;';
+      return 0;
+    },
+    validateCode(argument) {
+      const code = argument
+        .split('')
+        .filter(element => element !== '-')
+        .join('');
+      if (code.length === 5 && !Number.isNaN(code)) {
+        document.getElementById('postal-code').style = 'border-color:#00bc8c;';
+        return 1;
+      }
+      document.getElementById('postal-code').style = 'border-color: #e74c3c;';
+      return 0;
+    },
+    validateNumber(argument) {
+      const number = argument
+        .split('')
+        .filter(element => element !== ' ')
+        .join('');
+      if (number.length === 16 && !Number.isNaN(number)) {
+        document.getElementById('number').style = 'border-color:#00bc8c;';
+        return 1;
+      }
+      document.getElementById('number').style = 'border-color: #e74c3c;';
+      return 0;
+    },
+    validateExpiry(argument) {
+      const date = argument.split('/');
+      if (
+        parseInt(date[0], 10) > 0
+        && parseInt(date[0], 10) < 13
+        && parseInt(date[1], 10) > 1970
+        && parseInt(date[1], 10) < 2999
+      ) {
+        document.getElementById('expiration').style = 'border-color:#00bc8c;';
+        return 1;
+      }
+      document.getElementById('expiration').style = 'border-color: #e74c3c;';
+      return 0;
+    },
+    validateCVV(argument) {
+      if (argument.length === 3 && !Number.isNaN(argument)) {
+        document.getElementById('cvv').style = 'border-color:#00bc8c;';
+        return 1;
+      }
+      document.getElementById('cvv').style = 'border-color: #e74c3c;';
+      return 0;
     },
   },
 };
@@ -196,5 +311,9 @@ input[type='text'] {
   border: 2px solid rgb(200, 200, 200);
   border-radius: 5px;
   padding: 10px;
+}
+
+.alert-invalid {
+  color: #e74c3c;
 }
 </style>
