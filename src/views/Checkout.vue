@@ -40,7 +40,7 @@
       <div class="w3-container">
         <span class="form-header">Enter your address and credit card data</span>
         <form>
-          <div class="w3-quarter" style="padding-right: 16px">
+          <div class="w3-quarter" style="padding-right: 16px; min-width: 229.48px">
             <span class="form-subtitle">Your address</span>
             <div class="form-input">
               <label for="name">Name</label>
@@ -48,7 +48,7 @@
             </div>
             <div class="form-input">
               <label for="name">Phone</label>
-              <input type="text" id="phone" placeholder="0-100-200-300" v-model="customer.phone" />
+              <input type="text" id="phone" placeholder="100-200-300" v-model="customer.phone" />
             </div>
             <div class="form-input">
               <label for="name">Postal Code</label>
@@ -68,14 +68,17 @@
               />
             </div>
           </div>
-          <div class="w3-quarter" style="padding-right: 16px">
+          <div class="w3-quarter" style="padding-right: 16px; min-width: 229.48px">
             <span class="form-subtitle">Credit card</span>
             <div class="form-input">
-              <label for="name">Number</label>
+              <label for="name">
+                Number
+                <span class="excl">(MasterCard/Visa only)</span>
+              </label>
               <input
                 type="text"
                 id="number"
-                placeholder="---- ---- ---- ----"
+                placeholder="- - - -   - - - -   - - - -   - - - -"
                 v-model="customer.card.number"
               />
             </div>
@@ -163,33 +166,43 @@ export default {
     },
     validate() {
       let valid = 0;
-      valid += this.validateString(this.customer.name, 'name');
+      valid += this.validateName(this.customer.name);
       valid += this.validatePhone(this.customer.phone);
       valid += this.validateCode(this.customer.code);
-      valid += this.validateString(this.customer.town, 'town');
-      valid += this.validateString(this.customer.street, 'street');
-      valid += this.validateNumber(this.customer.card.number);
-      valid += this.validateExpiry(this.customer.card.expiry);
-      valid += this.validateCVV(this.customer.card.cvv);
-      if (valid === 8) {
+      valid += this.validateTown(this.customer.town);
+      valid += this.validateStreet(this.customer.street);
+      valid += this.validateCard(this.customer.card);
+      if (valid === 6) {
         document.getElementById('invalid').innerHTML = '';
         this.submit();
       } else document.getElementById('invalid').innerHTML = 'Please enter all necessary informations and match the format shown in placeholder!';
     },
-    validateString(argument, id) {
-      if (argument.length === 0) {
-        document.getElementById(id).style = 'border-color: #e74c3c;';
-        return 0;
+    validateName(argument) {
+      if (argument.length !== 0) {
+        const name = argument
+          .split('')
+          .filter(
+            element => (element >= 'a' && element <= 'z')
+              || (element >= 'A' && element <= 'Z')
+              || (element >= '0' && element <= '9')
+              || element === '.'
+              || element === '&'
+              || element === ' ',
+          )
+          .join('');
+        document.getElementById('name').style = 'border-color:#00bc8c;';
+        this.customer.name = name;
+        return 1;
       }
-      document.getElementById(id).style = 'border-color:#00bc8c;';
-      return 1;
+      document.getElementById('name').style = 'border-color: #e74c3c;';
+      return 0;
     },
     validatePhone(argument) {
-      const phone = argument
-        .split('')
-        .filter(element => element !== '-')
-        .join('');
-      if (phone.length === 10 && !Number.isNaN(phone)) {
+      const phone = argument.replace(/\D/g, '');
+      if (phone.length === 9 && !Number.isNaN(phone)) {
+        this.customer.phone = phone
+          .slice(0, 2)
+          .concat(' ', phone.slice(2, 4), ' ', phone.slice(4, 6), ' ', phone.slice(-3));
         document.getElementById('phone').style = 'border-color:#00bc8c;';
         return 1;
       }
@@ -197,39 +210,101 @@ export default {
       return 0;
     },
     validateCode(argument) {
-      const code = argument
-        .split('')
-        .filter(element => element !== '-')
-        .join('');
+      const code = argument.replace(/\D/g, '');
       if (code.length === 5 && !Number.isNaN(code)) {
+        this.customer.code = code.slice(0, 2).concat('-', code.slice(-3));
         document.getElementById('postal-code').style = 'border-color:#00bc8c;';
         return 1;
       }
       document.getElementById('postal-code').style = 'border-color: #e74c3c;';
       return 0;
     },
-    validateNumber(argument) {
-      const number = argument
-        .split('')
-        .filter(element => element !== ' ')
-        .join('');
-      if (number.length === 16 && !Number.isNaN(number)) {
-        document.getElementById('number').style = 'border-color:#00bc8c;';
+    validateTown(argument) {
+      if (argument.length !== 0) {
+        const town = argument
+          .split('')
+          .filter(
+            element => (element >= 'a' && element <= 'z')
+              || (element >= 'A' && element <= 'Z')
+              || element === '.'
+              || element === '&'
+              || element === ' '
+              || element === ',',
+          )
+          .join('');
+        document.getElementById('town').style = 'border-color:#00bc8c;';
+        this.customer.town = town;
         return 1;
+      }
+      document.getElementById('town').style = 'border-color: #e74c3c;';
+      return 0;
+    },
+    validateStreet(argument) {
+      if (argument.length !== 0) {
+        const street = argument
+          .split('')
+          .filter(
+            element => (element >= 'a' && element <= 'z')
+              || (element >= 'A' && element <= 'Z')
+              || (element >= '0' && element <= '9')
+              || element === '.'
+              || element === '&'
+              || element === ' '
+              || element === ',',
+          )
+          .join('');
+        document.getElementById('street').style = 'border-color:#00bc8c;';
+        this.customer.street = street;
+        return 1;
+      }
+      document.getElementById('street').style = 'border-color: #e74c3c;';
+      return 0;
+    },
+    validateCard(argument) {
+      this.validateNumber(argument.number);
+      this.validateExpiry(argument.expiry);
+      this.validateCVV(argument.cvv);
+    },
+    validateNumber(argument) {
+      const numMask = {
+        visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
+        mastercard: /^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/,
+        amex: /^3[47][0-9]{13}$/,
+        discover: /^65[4-9][0-9]{13}|64[4-9][0-9]{13}|6011[0-9]{12}|(622(?:12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|9[01][0-9]|92[0-5])[0-9]{10})$/,
+        diners_club: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
+        jcb: /^(?:2131|1800|35[0-9]{3})[0-9]{11}$/,
+      };
+      const number = argument.replace(/\D/g, '');
+      // console.log(number);
+      this.customer.card.number = number;
+      if (number.length === 16 && !Number.isNaN(number)) {
+        if (numMask.visa.test(number) || numMask.mastercard.test(number)) {
+          document.getElementById('number').style = 'border-color:#00bc8c;';
+          return 1;
+        }
       }
       document.getElementById('number').style = 'border-color: #e74c3c;';
       return 0;
     },
     validateExpiry(argument) {
-      const date = argument.split('/');
-      if (
-        parseInt(date[0], 10) > 0
-        && parseInt(date[0], 10) < 13
-        && parseInt(date[1], 10) > 1970
-        && parseInt(date[1], 10) < 2999
-      ) {
-        document.getElementById('expiration').style = 'border-color:#00bc8c;';
-        return 1;
+      const mask = new RegExp('\\b[0-9]{1,2}/[0-9][0-9][0-9][0-9]\\b');
+      if (mask.test(argument)) {
+        const date = argument.split('/');
+        const month = parseInt(date[0], 10);
+        const year = parseInt(date[1], 10);
+        const today = new Date();
+        if (month >= 1 && month <= 12 && year > 1000 && year < 9999) {
+          if (
+            year > today.getFullYear()
+            || (year === today.getFullYear() && month >= today.getMonth() + 1)
+          ) {
+            this.customer.card.expiry = month.toString().length === 1
+              ? '0'.concat(month.toString(), '/', year.toString())
+              : month.toString().concat('/', year.toString());
+            document.getElementById('expiration').style = 'border-color:#00bc8c;';
+            return 1;
+          }
+        }
       }
       document.getElementById('expiration').style = 'border-color: #e74c3c;';
       return 0;
@@ -315,5 +390,9 @@ input[type='text'] {
 
 .alert-invalid {
   color: #e74c3c;
+}
+
+.excl {
+  font-size: 0.8em;
 }
 </style>
