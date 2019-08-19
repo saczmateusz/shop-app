@@ -2,7 +2,7 @@
   <div>
     <div class="w3-hide-large" style="margin-top:83px"></div>
     <header class="w3-container w3-xlarge">
-      <p class="w3-left">Products | {{item.id}}</p>
+      <p class="w3-left" v-if="item">Products | {{item.id}}</p>
       <p class="w3-right">
         <router-link :to="{name: 'cart'}" class="link">
           <span class="cart" v-if="cartCount !== 1">{{cartCount}} items</span>
@@ -12,7 +12,7 @@
         <i class="fa fa-search"></i>
       </p>
     </header>
-    <div class="w3-container w3-grayscale" style="min-height: 700px">
+    <div class="w3-container w3-grayscale" style="min-height: 700px" v-if="item">
       <div class="w3-row">
         <div class="w3-col" style="width: 43%">
           <img :src="item.image" style="width: 100%" />
@@ -48,6 +48,7 @@
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex';
+import API from '@/lib/API';
 import Popup from '@/components/Popup.vue';
 
 export default {
@@ -56,8 +57,18 @@ export default {
     Popup,
   },
   beforeMount() {
-    this.item = this.items[this.$route.params.id - 1];
+    if (this.items) {
+      this.item = this.items[this.$route.params.id - 1];
+    } else if (localStorage.getItem('shopItems') !== null) {
+      this.loadItems();
+    } else {
+      API.getData().then((result) => {
+        this.setItems(result);
+        this.item = this.items[this.$route.params.id - 1];
+      });
+    }
   },
+  mounted() {},
   data() {
     return {
       item: null,
@@ -69,10 +80,14 @@ export default {
     ...mapState(['items']),
   },
   methods: {
-    ...mapActions(['addToCart']),
+    ...mapActions(['addToCart', 'setItems']),
     saveToCart(item) {
       this.addToCart(item);
       this.popup = !this.popup;
+    },
+    loadItems() {
+      this.setItems(JSON.parse(localStorage.getItem('shopItems')));
+      this.item = this.items[this.$route.params.id - 1];
     },
   },
 };
