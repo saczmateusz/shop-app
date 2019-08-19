@@ -25,9 +25,7 @@
             <span class="checkout-item-info-p">{{item.product_name}}</span>
             <span class="w3-text-gray checkout-item-info-p">({{item.price}}/pc.)</span>
           </div>
-          <div class="w3-right checkout-item-sum">
-            ${{(item.price.slice(1) * item.count).toFixed(2)}}
-          </div>
+          <div class="w3-right item-sum">${{(item.price.slice(1) * item.count).toFixed(2)}}</div>
         </div>
       </div>
       <div class="w3-container">
@@ -199,7 +197,7 @@ export default {
     },
     validatePhone(argument) {
       const phone = argument.replace(/\D/g, '');
-      if (phone.length === 9 && !Number.isNaN(phone)) {
+      if (phone.length === 9) {
         this.customer.phone = phone
           .slice(0, 2)
           .concat(' ', phone.slice(2, 4), ' ', phone.slice(4, 6), ' ', phone.slice(-3));
@@ -211,7 +209,7 @@ export default {
     },
     validateCode(argument) {
       const code = argument.replace(/\D/g, '');
-      if (code.length === 5 && !Number.isNaN(code)) {
+      if (code.length === 5) {
         this.customer.code = code.slice(0, 2).concat('-', code.slice(-3));
         document.getElementById('postal-code').style = 'border-color:#00bc8c;';
         return 1;
@@ -263,7 +261,6 @@ export default {
     validateCard(argument) {
       this.validateNumber(argument.number);
       this.validateExpiry(argument.expiry);
-      this.validateCVV(argument.cvv);
     },
     validateNumber(argument) {
       const numMask = {
@@ -275,7 +272,13 @@ export default {
         jcb: /^(?:2131|1800|35[0-9]{3})[0-9]{11}$/,
       };
       const number = argument.replace(/\D/g, '');
-      // console.log(number);
+      let type = '';
+      Object.keys(numMask).forEach((key) => {
+        const regex = numMask[key];
+        if (regex.test(number)) type = key;
+      });
+      this.validateCVV(argument.cvv, type);
+      // console.log(type);
       this.customer.card.number = number;
       if (number.length === 16 && !Number.isNaN(number)) {
         if (numMask.visa.test(number) || numMask.mastercard.test(number)) {
@@ -309,9 +312,11 @@ export default {
       document.getElementById('expiration').style = 'border-color: #e74c3c;';
       return 0;
     },
-    validateCVV(argument) {
-      if (argument.length === 3 && !Number.isNaN(argument)) {
+    validateCVV(argument, type) {
+      const cvv = argument.replace(/\D/g, '');
+      if (cvv.length === 3 && type) {
         document.getElementById('cvv').style = 'border-color:#00bc8c;';
+        this.customer.card.cvv = cvv;
         return 1;
       }
       document.getElementById('cvv').style = 'border-color: #e74c3c;';
@@ -335,7 +340,7 @@ export default {
   font-weight: bold;
 }
 
-.checkout-item-sum {
+.item-sum {
   display: inline;
   margin: 0px;
   font-weight: bold;
