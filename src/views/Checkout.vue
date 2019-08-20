@@ -69,10 +69,7 @@
           <div class="w3-quarter" style="padding-right: 16px; min-width: 229.48px">
             <span class="form-subtitle">Credit card</span>
             <div class="form-input">
-              <label for="name">
-                Number
-                <span class="excl">(MasterCard/Visa only)</span>
-              </label>
+              <label for="name">Number</label>
               <input
                 type="text"
                 id="number"
@@ -170,7 +167,7 @@ export default {
       valid += this.validateTown(this.customer.town);
       valid += this.validateStreet(this.customer.street);
       valid += this.validateCard(this.customer.card);
-      if (valid === 6) {
+      if (valid === 8) {
         document.getElementById('invalid').innerHTML = '';
         this.submit();
       } else document.getElementById('invalid').innerHTML = 'Please enter all necessary informations and match the format shown in placeholder!';
@@ -259,34 +256,53 @@ export default {
       return 0;
     },
     validateCard(argument) {
-      this.validateNumber(argument.number);
-      this.validateExpiry(argument.expiry);
+      return (
+        this.validateNumber(argument.number, argument.cvv) + this.validateExpiry(argument.expiry)
+      );
     },
-    validateNumber(argument) {
+    validateNumber(num, cvv) {
       const numMask = {
         visa: /^4[0-9]{12}(?:[0-9]{3})?$/,
         mastercard: /^5[1-5][0-9]{14}$|^2(?:2(?:2[1-9]|[3-9][0-9])|[3-6][0-9][0-9]|7(?:[01][0-9]|20))[0-9]{12}$/,
         amex: /^3[47][0-9]{13}$/,
         discover: /^65[4-9][0-9]{13}|64[4-9][0-9]{13}|6011[0-9]{12}|(622(?:12[6-9]|1[3-9][0-9]|[2-8][0-9][0-9]|9[01][0-9]|92[0-5])[0-9]{10})$/,
         diners_club: /^3(?:0[0-5]|[68][0-9])[0-9]{11}$/,
-        jcb: /^(?:2131|1800|35[0-9]{3})[0-9]{11}$/,
+        jcb: /^(?:2131|1800|3[05][0-9]{3})[0-9]{11}$/,
       };
-      const number = argument.replace(/\D/g, '');
+      const number = num.replace(/\D/g, '');
+      this.customer.card.number = number;
       let type = '';
       Object.keys(numMask).forEach((key) => {
         const regex = numMask[key];
         if (regex.test(number)) type = key;
       });
-      this.validateCVV(argument.cvv, type);
-      // console.log(type);
-      this.customer.card.number = number;
-      if (number.length === 16 && !Number.isNaN(number)) {
-        if (numMask.visa.test(number) || numMask.mastercard.test(number)) {
-          document.getElementById('number').style = 'border-color:#00bc8c;';
-          return 1;
-        }
+      if (type.length !== 0 && this.luhnCheck(number) && this.validateCVV(cvv, type)) {
+        document.getElementById('number').style = 'border-color:#00bc8c;';
+        return 2;
       }
       document.getElementById('number').style = 'border-color: #e74c3c;';
+      return 0;
+    },
+    luhnCheck(num) {
+      const arr = (`${num}`)
+        .split('')
+        .reverse()
+        .map(x => parseInt(x, 10));
+      const sum = arr.reduce(
+        (acc, val, i) => (i % 2 === 0 ? acc + val : acc
+        + (val * 2 >= 9 ? (val * 2) % 9 || 9 : val * 2)),
+        0,
+      );
+      return sum % 10 === 0;
+    },
+    validateCVV(argument, type) {
+      const cvv = argument.replace(/\D/g, '');
+      if (cvv.length === 3 || (cvv.length === 4 && type === 'amex')) {
+        document.getElementById('cvv').style = 'border-color:#00bc8c;';
+        this.customer.card.cvv = cvv;
+        return 1;
+      }
+      document.getElementById('cvv').style = 'border-color: #e74c3c;';
       return 0;
     },
     validateExpiry(argument) {
@@ -310,16 +326,6 @@ export default {
         }
       }
       document.getElementById('expiration').style = 'border-color: #e74c3c;';
-      return 0;
-    },
-    validateCVV(argument, type) {
-      const cvv = argument.replace(/\D/g, '');
-      if (cvv.length === 3 && type) {
-        document.getElementById('cvv').style = 'border-color:#00bc8c;';
-        this.customer.card.cvv = cvv;
-        return 1;
-      }
-      document.getElementById('cvv').style = 'border-color: #e74c3c;';
       return 0;
     },
   },
@@ -395,9 +401,5 @@ input[type='text'] {
 
 .alert-invalid {
   color: #e74c3c;
-}
-
-.excl {
-  font-size: 0.8em;
 }
 </style>

@@ -2,7 +2,9 @@
   <div id="app" class="w3-content content">
     <Sidebar id="sidebar" style="z-index: 3" />
     <header class="w3-bar w3-top w3-hide-large w3-black w3-xlarge">
-      <div class="w3-bar-item w3-padding-24 w3-wide">LOGO</div>
+      <router-link class="link light" :to="{ name: 'home' }">
+        <div class="w3-bar-item w3-padding-24 w3-wide">LOGO</div>
+      </router-link>
       <a
         href="javascript:void(0)"
         class="w3-bar-item w3-button w3-padding-24 w3-right"
@@ -137,10 +139,10 @@ h6,
 
 .on-hover {
   display: none;
-  position: relative;
-  top: -100px;
-  left: 63px;
-  margin: -19px;
+  position: absolute;
+  top: 40%;
+  left: 25%;
+  margin: 0px;
   padding: 0px;
 }
 
@@ -167,6 +169,10 @@ h6,
 
 .flashing:active {
   animation: flash 0.1s;
+}
+
+.light {
+  color: white;
 }
 
 @keyframes flash {
