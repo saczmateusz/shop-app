@@ -14,12 +14,12 @@ export default new Vuex.Store({
       localStorage.setItem('shopItems', JSON.stringify(payload));
     },
     addToCart(state, payload) {
-      // eslint-disable-next-line
-      const index = state.cart.findIndex((element) => {
-        return element.id === payload.id;
-      });
-      if (index === -1) state.cart.push({ ...payload, count: 1 });
-      else state.cart[index].count += 1;
+      const index = state.cart.findIndex(element => element.id === payload.id);
+      if (index === -1) {
+        state.cart.push({ ...payload, count: 1 });
+      } else {
+        state.cart[index].count += 1;
+      }
       localStorage.setItem('cartItems', JSON.stringify(state.cart));
     },
     dropFromCart(state, payload) {
@@ -56,7 +56,6 @@ export default new Vuex.Store({
     cartCount: state => state.cart.reduce((a, b) => a + (b.count || 0), 0),
     cartValue: state => state.cart.reduce(
       (a, b) => a + (b.count * b.price.slice(1) || 0), 0,
-    )
-      .toFixed(2),
+    ).toFixed(2),
   },
 });

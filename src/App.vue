@@ -43,14 +43,14 @@ export default {
     ...mapState(['items']),
   },
   async beforeMount() {
-    if (localStorage.getItem('shopItems') !== null) this.setItems(JSON.parse(localStorage.getItem('shopItems')));
-    else {
-      await API.getData().then((result) => {
-        this.setItems(result);
-      });
+    if (localStorage.getItem('shopItems') !== null) {
+      this.setItems(JSON.parse(localStorage.getItem('shopItems')));
+    } else {
+      const result = await API.getData();
+      this.setItems(result);
     }
     if (localStorage.getItem('cartItems') !== null) {
-      await this.loadCart();
+      this.loadCart();
     }
   },
   methods: {

@@ -146,12 +146,14 @@ export default {
         },
       },
       button: false,
+      charset: '',
     };
   },
   mounted() {
     if (this.cartCount === 0) {
       this.$router.go(-1);
     }
+    this.charset = 'ąćęłńóśźżĄĆĘŁŃÓŚŹŻ';
   },
   methods: {
     ...mapActions(['clearCart']),
@@ -182,7 +184,9 @@ export default {
               || (element >= '0' && element <= '9')
               || element === '.'
               || element === '&'
-              || element === ' ',
+              || element === ' '
+              || element === ','
+              || element === this.checkCharacters(element),
           )
           .join('');
         document.getElementById('name').style = 'border-color:#00bc8c;';
@@ -191,6 +195,9 @@ export default {
       }
       document.getElementById('name').style = 'border-color: #e74c3c;';
       return 0;
+    },
+    checkCharacters(char) {
+      return this.charset.split('').find(el => el === char);
     },
     validatePhone(argument) {
       const phone = argument.replace(/\D/g, '');
@@ -221,10 +228,12 @@ export default {
           .filter(
             element => (element >= 'a' && element <= 'z')
               || (element >= 'A' && element <= 'Z')
+              || (element >= '0' && element <= '9')
               || element === '.'
               || element === '&'
               || element === ' '
-              || element === ',',
+              || element === ','
+              || element === this.checkCharacters(element),
           )
           .join('');
         document.getElementById('town').style = 'border-color:#00bc8c;';
@@ -245,7 +254,8 @@ export default {
               || element === '.'
               || element === '&'
               || element === ' '
-              || element === ',',
+              || element === ','
+              || element === this.checkCharacters(element),
           )
           .join('');
         document.getElementById('street').style = 'border-color:#00bc8c;';
@@ -284,13 +294,14 @@ export default {
       return 0;
     },
     luhnCheck(num) {
-      const arr = (`${num}`)
+      const arr = `${num}`
         .split('')
         .reverse()
         .map(x => parseInt(x, 10));
       const sum = arr.reduce(
-        (acc, val, i) => (i % 2 === 0 ? acc + val : acc
-        + (val * 2 >= 9 ? (val * 2) % 9 || 9 : val * 2)),
+        (acc, val, i) => (
+          i % 2 === 0 ? acc + val : acc + (val * 2 >= 9 ? (val * 2) % 9 || 9 : val * 2)
+        ),
         0,
       );
       return sum % 10 === 0;
