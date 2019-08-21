@@ -112,7 +112,9 @@ export default {
           document
             .getElementById('jeans-button')
             .setAttribute('style', 'color: rgb(0, 0, 0); background-color: rgb(241, 241, 241)');
-        } else document.getElementById('jeans-button').setAttribute('style', '');
+        } else {
+          document.getElementById('jeans-button').setAttribute('style', '');
+        }
         return this.$route.params.cat.split(' ')[2];
       }
       return 'home';

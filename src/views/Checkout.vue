@@ -172,7 +172,9 @@ export default {
       if (valid === 8) {
         document.getElementById('invalid').innerHTML = '';
         this.submit();
-      } else document.getElementById('invalid').innerHTML = 'Please enter all necessary informations and match the format shown in placeholder!';
+      } else {
+        document.getElementById('invalid').innerHTML = 'Please enter all necessary informations and match the format shown in placeholder!';
+      }
     },
     validateName(argument) {
       if (argument.length !== 0) {

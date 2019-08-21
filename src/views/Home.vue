@@ -40,7 +40,6 @@
               <img
                 :src="item.image"
                 style="width: 100%"
-                :href="{name: 'product', params: { id: item.id }}"
               />
             </router-link>
             <div class="on-hover">
